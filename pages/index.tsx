@@ -2,8 +2,22 @@ import type { NextPage } from 'next'
 
 const Home: NextPage = () => {
   return (
-    <div className="bg-violet-200 py-20 px-5 flex flex-col space-y-5 min-h-screen">
-      <div className="bg-white p-10 rounded-2xl shadow-xl">
+    <div className="bg-violet-300 py-20 px-5 flex flex-col space-y-5 min-h-screen">
+      <div className="bg-white p-10 rounded-2xl shadow-xl group">
+        <details className="select-none">
+          <summary className="select-none outline-none">selection</summary>
+          <span>is selected.</span>
+        </details>
+      </div>
+      <div className="bg-white p-10 rounded-2xl shadow-xl group">
+        <ul className="list-decimal marker:text-teal-500">
+          <li>hi</li>
+          <li>everyone</li>
+          <li>my name is</li>
+          <li>taebok</li>
+        </ul>
+      </div>
+      <div className="bg-white p-10 rounded-2xl shadow-xl group">
         <span className="font-bold text-3xl text-gray-800">Select Item</span>
         <div className="flex justify-between my-2">
           <span className="text-gray-500">Grey Chair</span>
@@ -17,7 +31,7 @@ const Home: NextPage = () => {
           <span>Total</span>
           <span className="font-semibold">$10</span>
         </div>
-        <div className="mt-5 bg-blue-500 text-white p-3 text-center rounded-full w-2/4 mx-auto">
+        <div className="mt-5 bg-blue-500 text-white p-3 text-center rounded-full w-2/4 mx-auto group-hover:bg-yellow-500 transition">
           Checkout
         </div>
       </div>
@@ -69,9 +83,9 @@ const Home: NextPage = () => {
           </div>
           <div className="flex justify-between items-center">
             <div className="space-x-3">
-              <input type="radio" />
-              <input type="radio" />
-              <input type="radio" />
+              <button className="rounded-full w-5 h-5 bg-violet-500 hover:ring ring-offset-2 ring-violet-500 transition"></button>
+              <button className="rounded-full w-5 h-5 bg-teal-500 hover:ring ring-offset-2 ring-teal-500 transition"></button>
+              <button className="rounded-full w-5 h-5 bg-yellow-500 hover:ring ring-offset-2 ring-yellow-500 transition"></button>
             </div>
             <div className="space-x-6">
               <button className="w-10 h-10 p-2 bg-blue-50 rounded-md text-lg">-</button>
@@ -81,7 +95,7 @@ const Home: NextPage = () => {
           </div>
           <div className="flex justify-between items-center mt-10">
             <span className="text-4xl font-semibold" >$450</span>
-            <div className="w-32 p-4 bg-blue-400 rounded-full text-lime-100 text-center" >Add to Cart</div>
+            <button className="w-32 p-4 bg-blue-400 rounded-full text-lime-100 text-center" >Add to Cart</button>
           </div>
         </div>
       </div>
