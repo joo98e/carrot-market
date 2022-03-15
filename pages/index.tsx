@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 
 const Home: NextPage = () => {
   return (
-    <div className="bg-violet-300 py-20 px-5 flex flex-col space-y-5 min-h-screen">
+    <div className="bg-violet-300 py-20 px-5 grid gap-10 lg:grid-cols-3 md:grid-cols-2 space-y-5 min-h-screen">
       <div className="bg-white p-10 rounded-2xl shadow-xl group">
         <details className="select-none">
           <summary className="select-none outline-none">selection</summary>
@@ -17,7 +17,7 @@ const Home: NextPage = () => {
           <li>taebok</li>
         </ul>
       </div>
-      <div className="bg-white p-10 rounded-2xl shadow-xl group">
+      <div className="bg-white p-10 sm:bg-red-300 md:bg-teal-400 rounded-2xl shadow-xl group">
         <span className="font-bold text-3xl text-gray-800">Select Item</span>
         <div className="flex justify-between my-2">
           <span className="text-gray-500">Grey Chair</span>
@@ -37,28 +37,20 @@ const Home: NextPage = () => {
       </div>
 
       {/* #2 */}
-      <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-xl overflow-hidden md:col-span-2">
         <div className="bg-blue-600 p-6 pb-20">
           <span className="text-white font-semibold text-2xl">Profile</span>
         </div>
         <div className="rounded-3xl relative -top-5 bg-white p-6">
           <div className="flex justify-between">
             <div className="flex flex-col items-center">
-              <span className="text-sm text-gray-500">
-                Orders
-              </span>
-              <span className="font-semibold">
-                340
-              </span>
+              <span className="text-sm text-gray-500">Orders</span>
+              <span className="font-semibold">340</span>
             </div>
             <div className="flex relative -top-16 w-32 h-32 bg-red-400 rounded-full" />
             <div className="flex flex-col items-center">
-              <span className="text-sm text-gray-500">
-                Spent
-              </span>
-              <span className="font-semibold">
-                $2,310
-              </span>
+              <span className="text-sm text-gray-500">Spent</span>
+              <span className="font-semibold">$2,310</span>
             </div>
           </div>
           <div className="flex flex-col items-center -mb-5 -mt-10">
@@ -67,7 +59,7 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
-      <div className="bg-white p-10 rounded-2xl shadow-xl">
+      <div className="bg-white p-10 rounded-2xl shadow-xl md:col-span-2">
         <div className="flex justify-between items-center mb-10">
           <span>⬅️</span>
           <div className="flex justify-between items-center space-x-5">
@@ -78,7 +70,7 @@ const Home: NextPage = () => {
         <div className="h-80 bg-gray-600 " />
         <div className="p-3 mt-2">
           <div className="grid grid-cols-1 mb-4">
-            <span className="text-2xl font-semibold" >Swoon Lounge</span>
+            <span className="text-2xl font-semibold">Swoon Lounge</span>
             <span className="text-gray-600">Chair</span>
           </div>
           <div className="flex justify-between items-center">
@@ -88,14 +80,20 @@ const Home: NextPage = () => {
               <button className="rounded-full w-5 h-5 bg-yellow-500 hover:ring ring-offset-2 ring-yellow-500 transition"></button>
             </div>
             <div className="space-x-6">
-              <button className="w-10 h-10 p-2 bg-blue-50 rounded-md text-lg">-</button>
+              <button className="w-10 h-10 p-2 bg-blue-50 rounded-md text-lg">
+                -
+              </button>
               <span>1</span>
-              <button className="w-10 h-10 p-2 bg-blue-50 rounded-md text-lg">+</button>
+              <button className="w-10 h-10 p-2 bg-blue-50 rounded-md text-lg">
+                +
+              </button>
             </div>
           </div>
           <div className="flex justify-between items-center mt-10">
-            <span className="text-4xl font-semibold" >$450</span>
-            <button className="w-32 p-4 bg-blue-400 rounded-full text-lime-100 text-center" >Add to Cart</button>
+            <span className="text-4xl font-semibold">$450</span>
+            <button className="w-32 p-4 bg-blue-400 rounded-full text-lime-100 text-center">
+              Add to Cart
+            </button>
           </div>
         </div>
       </div>
