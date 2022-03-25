@@ -25,10 +25,25 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/items/[id]": [
+    "/profile": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/items/[id].js"
+      "static/chunks/pages/profile.js"
+    ],
+    "/profile/bought": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/profile/bought.js"
+    ],
+    "/profile/loved": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/profile/loved.js"
+    ],
+    "/profile/sold": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/profile/sold.js"
     ]
   },
   "ampFirstPages": []
