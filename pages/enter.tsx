@@ -1,8 +1,5 @@
 import { useState } from 'react'
-
-const makeClassName = (...classnames: string[]) => {
-  return classnames.join(' ')
-}
+import { makeClassName } from '../libs/utils'
 
 export default function Enter() {
   const [method, setMethod] = useState<'email' | 'phone'>('email')
@@ -41,7 +38,10 @@ export default function Enter() {
           </div>
         </div>
         <form className="p-8 flex flex-col">
-          <label htmlFor="input" className="text-sm font-medium text-gray-500 mb-4">
+          <label
+            htmlFor="input"
+            className="text-sm font-medium text-gray-500 mb-4"
+          >
             {method === 'email' ? 'Email address' : null}
             {method === 'phone' ? 'Phone number' : null}
           </label>

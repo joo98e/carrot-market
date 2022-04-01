@@ -25,15 +25,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/streams/[id]": [
+    "/items/[id]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/streams/[id].js"
-    ],
-    "/streams/create": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/streams/create.js"
+      "static/chunks/pages/items/[id].js"
     ]
   },
   "ampFirstPages": []
