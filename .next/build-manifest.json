@@ -29,11 +29,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/profile/edit.js"
-    ],
-    "/profile/sold": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/profile/sold.js"
     ]
   },
   "ampFirstPages": []
