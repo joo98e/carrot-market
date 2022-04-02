@@ -1,13 +1,39 @@
-import type { NextPage } from "next";
-import { useState } from "react";
-import Button from "../components/button";
-import Input from "../components/input";
-import { cls } from "../libs/utils";
+import type { NextPage } from 'next'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import Button from '@components/button'
+import Input from '@components/input'
+import useMutation from '@libs/client/useMutation'
+import { cls } from '@libs/client/utils'
+
+interface IEnterForm {
+  email?: string
+  phone?: string
+}
 
 const Enter: NextPage = () => {
-  const [method, setMethod] = useState<"email" | "phone">("email");
-  const onEmailClick = () => setMethod("email");
-  const onPhoneClick = () => setMethod("phone");
+  const [enter, { loading, data, error }] = useMutation("/api/users/enter")
+  const [state, setState] = useState({
+    loading : false,
+    data : undefined,
+    error : undefined
+  })
+  const [submitting, setSubmitting] = useState(false)
+  const { register, reset, handleSubmit } = useForm<IEnterForm>()
+  const [method, setMethod] = useState<'email' | 'phone'>('email')
+  const onEmailClick = () => {
+    setMethod('email')
+    reset()
+  }
+  const onPhoneClick = () => {
+    setMethod('phone')
+    reset()
+  }
+
+  const onValid = async (data: IEnterForm) => {
+    enter(data);
+  }
+
   return (
     <div className="mt-16 px-4">
       <h3 className="text-3xl font-bold text-center">Enter to Carrot</h3>
@@ -17,10 +43,10 @@ const Enter: NextPage = () => {
           <div className="grid  border-b  w-full mt-8 grid-cols-2 ">
             <button
               className={cls(
-                "pb-4 font-medium text-sm border-b-2",
-                method === "email"
-                  ? " border-orange-500 text-orange-400"
-                  : "border-transparent hover:text-gray-400 text-gray-500"
+                'pb-4 font-medium text-sm border-b-2',
+                method === 'email'
+                  ? ' border-orange-500 text-orange-400'
+                  : 'border-transparent hover:text-gray-400 text-gray-500'
               )}
               onClick={onEmailClick}
             >
@@ -28,10 +54,10 @@ const Enter: NextPage = () => {
             </button>
             <button
               className={cls(
-                "pb-4 font-medium text-sm border-b-2",
-                method === "phone"
-                  ? " border-orange-500 text-orange-400"
-                  : "border-transparent hover:text-gray-400 text-gray-500"
+                'pb-4 font-medium text-sm border-b-2',
+                method === 'phone'
+                  ? ' border-orange-500 text-orange-400'
+                  : 'border-transparent hover:text-gray-400 text-gray-500'
               )}
               onClick={onPhoneClick}
             >
@@ -39,12 +65,22 @@ const Enter: NextPage = () => {
             </button>
           </div>
         </div>
-        <form className="flex flex-col mt-8 space-y-4">
-          {method === "email" ? (
-            <Input name="email" label="Email address" type="email" required />
-          ) : null}
-          {method === "phone" ? (
+        <form
+          className="flex flex-col mt-8 space-y-4"
+          onSubmit={handleSubmit(onValid)}
+        >
+          {method === 'email' ? (
             <Input
+              register={register('email')}
+              name="email"
+              label="Email address"
+              type="email"
+              required
+            />
+          ) : null}
+          {method === 'phone' ? (
+            <Input
+              register={register('phone')}
               name="phone"
               label="Phone number"
               type="number"
@@ -52,9 +88,13 @@ const Enter: NextPage = () => {
               required
             />
           ) : null}
-          {method === "email" ? <Button text={"Get login link"} /> : null}
-          {method === "phone" ? (
-            <Button text={"Get one-time password"} />
+          {method === 'email' ? (
+            <Button text={submitting ? 'loading...' : 'Get login link'} />
+          ) : null}
+          {method === 'phone' ? (
+            <Button
+              text={submitting ? 'loading...' : 'Get one-time password'}
+            />
           ) : null}
         </form>
 
@@ -96,6 +136,6 @@ const Enter: NextPage = () => {
         </div>
       </div>
     </div>
-  );
-};
-export default Enter;
+  )
+}
+export default Enter
