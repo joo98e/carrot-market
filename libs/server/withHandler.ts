@@ -10,7 +10,10 @@ export interface ResponseType {
 type fn = (req: NextApiRequest, res: NextApiResponse) => void
 
 const withHandler = (method: httpMethod, fn: fn) => {
-  return async function (req: NextApiRequest, res: NextApiResponse) {
+  return async function (
+    req: NextApiRequest,
+    res: NextApiResponse
+  ): Promise<any> {
     if (req.method !== method) {
       return res.status(405).end()
     }

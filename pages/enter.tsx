@@ -11,16 +11,23 @@ interface IEnterForm {
   phone?: string
 }
 
-interface EnterMutationResult {
+interface ITokenForm {
+  token: number
+}
+
+interface MutationResult {
   ok: boolean
   [key: string]: any
 }
 
 const Enter: NextPage = () => {
   const [enter, { loading, data, error }] =
-    useMutation<EnterMutationResult>('/api/users/enter')
-  const [submitting, setSubmitting] = useState(false)
+    useMutation<MutationResult>('/api/users/enter')
+  const [confirmToken, { loading: tokenLoading, data: tokenData }] =
+    useMutation<MutationResult>('/api/users/confirm')
   const { register, reset, handleSubmit } = useForm<IEnterForm>()
+  const { register: tokenRegister, handleSubmit: tokenHandleSubmit } =
+    useForm<ITokenForm>()
   const [method, setMethod] = useState<'email' | 'phone'>('email')
   const onEmailClick = () => {
     setMethod('email')
@@ -31,24 +38,41 @@ const Enter: NextPage = () => {
     reset()
   }
 
-  const onValid = async (data: IEnterForm) => {
+  const onValid = async (validForm: IEnterForm) => {
     if (loading) return
-    enter(data)
+    enter(validForm)
   }
 
-  console.log(data?.ok)
+  const onTokenValid = async (validForm: ITokenForm) => {
+    if (tokenLoading) return
+    confirmToken(validForm)
+  }
 
   return (
     <div className="mt-16 px-4">
       <h3 className="text-3xl font-bold text-center">Enter to Carrot</h3>
       <div className="mt-12">
-        {data?.ok ? null : (
+        {data?.ok ? (
+          <form
+            className="flex flex-col mt-8 space-y-4"
+            onSubmit={tokenHandleSubmit(onTokenValid)}
+          >
+            <Input
+              register={tokenRegister('token')}
+              name="token"
+              label="Confirmation Token"
+              type="number"
+              required
+            />
+            <Button text={tokenLoading ? 'loading...' : 'Confirm Token'} />
+          </form>
+        ) : (
           <>
             <div className="flex flex-col items-center">
               <h5 className="text-sm text-gray-500 font-medium">
                 Enter using:
               </h5>
-              <div className="grid  border-b  w-full mt-8 grid-cols-2 ">
+              <div className="grid border-b  w-full mt-8 grid-cols-2 ">
                 <button
                   className={cls(
                     'pb-4 font-medium text-sm border-b-2',
@@ -74,12 +98,14 @@ const Enter: NextPage = () => {
               </div>
             </div>
             <form
-              className="flex flex-col mt-8 space-y-4"
               onSubmit={handleSubmit(onValid)}
+              className="flex flex-col mt-8 space-y-4"
             >
               {method === 'email' ? (
                 <Input
-                  register={register('email')}
+                  register={register('email', {
+                    required: true,
+                  })}
                   name="email"
                   label="Email address"
                   type="email"
@@ -97,12 +123,10 @@ const Enter: NextPage = () => {
                 />
               ) : null}
               {method === 'email' ? (
-                <Button text={submitting ? 'loading...' : 'Get login link'} />
+                <Button text={loading ? 'Loading' : 'Get login link'} />
               ) : null}
               {method === 'phone' ? (
-                <Button
-                  text={submitting ? 'loading...' : 'Get one-time password'}
-                />
+                <Button text={loading ? 'Loading' : 'Get one-time password'} />
               ) : null}
             </form>
           </>

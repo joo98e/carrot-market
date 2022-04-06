@@ -28,13 +28,15 @@ const handler = async (
           },
           create: {
             // 만들 것
-            name: 'Anonymous',
+            name: payload,
             ...user,
           },
         },
       },
     },
   })
+
+  console.log(token)
 
   // twilio는 국제 기업이기 때문에 국가코드(82)를 넣어주어야 한다.
 
@@ -57,8 +59,6 @@ const handler = async (
     //   html : `<strong>Your token is ${payload}</strong>`
     // });
   }
-
-  console.log(user)
 
   return res.json({
     ok: true,
