@@ -12,7 +12,7 @@ const handler = async (
   res: NextApiResponse<ResponseType>
 ) => {
   const { phone, email } = req.body
-  const user = phone ? { phone: +phone } : email ? { email } : null
+  const user = phone ? { phone: phone } : email ? { email } : null
 
   if (!user) return res.status(400).json({ ok: false })
 
@@ -35,8 +35,6 @@ const handler = async (
       },
     },
   })
-
-  console.log(token)
 
   // twilio는 국제 기업이기 때문에 국가코드(82)를 넣어주어야 한다.
 
@@ -118,4 +116,8 @@ const handler = async (
   // }
 }
 
-export default withHandler('POST', handler)
+export default withHandler({
+  method: 'POST',
+  handler,
+  isPrivate: false,
+})

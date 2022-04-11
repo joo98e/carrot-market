@@ -40,7 +40,7 @@ const Layout = ({ title, canGoBack, hasTabBar, children }: LayoutProps) => {
           <span className={cls(canGoBack ? 'mx-auto' : '', '')}>{title}</span>
         )}
       </div>
-      <div className={cls('pt16', hasTabBar ? 'pb-16' : '')}>{children}</div>
+      <div className={cls('pt-8', hasTabBar ? 'pb-16' : '')}>{children}</div>
       {hasTabBar && (
         <nav className="bg-white w-full max-w-lg text-gray-800 border-t fixed bottom-0 pb-6 pt-3 flex justify-between items-center">
           <Link href="/home">

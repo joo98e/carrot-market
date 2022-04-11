@@ -7,9 +7,15 @@ export interface ResponseType {
   [key: string]: any
 }
 
-type fn = (req: NextApiRequest, res: NextApiResponse) => void
+type handler = (req: NextApiRequest, res: NextApiResponse) => void
 
-const withHandler = (method: httpMethod, fn: fn) => {
+interface ConfigType {
+  method: httpMethod
+  handler: handler
+  isPrivate?: boolean
+}
+
+const withHandler = ({ method, handler, isPrivate = true }: ConfigType) => {
   return async function (
     req: NextApiRequest,
     res: NextApiResponse
@@ -17,9 +23,14 @@ const withHandler = (method: httpMethod, fn: fn) => {
     if (req.method !== method) {
       return res.status(405).end()
     }
-
+    if (isPrivate && !req.session.user) {
+      return res.status(401).json({
+        ok: false,
+        error: 'Unauthorized.',
+      })
+    }
     try {
-      await fn(req, res)
+      await handler(req, res)
     } catch (error) {
       console.log(error)
       return res.status(500).json({ error })
