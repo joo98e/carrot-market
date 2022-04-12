@@ -14,6 +14,8 @@ const handler = async (
     },
   })
 
+  console.log(foundToken)
+
   if (!foundToken) return res.status(404).end()
 
   req.session.user = {
@@ -28,7 +30,7 @@ const handler = async (
   })
 
   return res.json({
-    ok: true, 
+    ok: true,
   })
 }
 
@@ -36,5 +38,6 @@ export default withApiSession(
   withHandler({
     method: 'POST',
     handler,
+    isPrivate: false,
   })
 )
