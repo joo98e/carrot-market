@@ -60,6 +60,7 @@ const handler = async (
 
   return res.json({
     ok: true,
+    payload,
   })
 
   // 위 const token에서 함께 처리(connnectOrCreate)

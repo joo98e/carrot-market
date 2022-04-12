@@ -18,6 +18,7 @@ interface ITokenForm {
 
 interface MutationResult {
   ok: boolean
+  payload?: string
   [key: string]: any
 }
 
@@ -30,6 +31,8 @@ const Enter: NextPage = () => {
   const { register: tokenRegister, handleSubmit: tokenHandleSubmit } =
     useForm<ITokenForm>()
   const [method, setMethod] = useState<'email' | 'phone'>('email')
+  const router = useRouter()
+  
   const onEmailClick = () => {
     setMethod('email')
     reset()
@@ -48,10 +51,9 @@ const Enter: NextPage = () => {
     if (tokenLoading) return
     confirmToken(validForm)
   }
-  const router = useRouter()
   useEffect(() => {
     if (tokenData?.ok) {
-      router.push('/home')
+      router.replace('/home')
     }
   }, [tokenData, router])
 
@@ -72,6 +74,7 @@ const Enter: NextPage = () => {
               required
             />
             <Button text={tokenLoading ? 'loading...' : 'Confirm Token'} />
+            {!loading && <span>Your vertify Token is {data.payload}</span>}
           </form>
         ) : (
           <>

@@ -7,6 +7,7 @@ interface InputProps {
   register?: UseFormRegisterReturn
   type: string
   required: boolean
+  placeholder?: string
   // [key: string]: any;
 }
 
@@ -17,6 +18,7 @@ export default function Input({
   register,
   type,
   required,
+  placeholder,
 }: InputProps) {
   return (
     <div>
@@ -64,6 +66,7 @@ export default function Input({
             {...register}
             type={type}
             required={required}
+            placeholder={placeholder}
             className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md rounded-l-none shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
           />
         </div>

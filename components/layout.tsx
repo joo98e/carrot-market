@@ -18,7 +18,7 @@ interface ICanGoBack {
 }
 
 const CanGoBack = ({ move }: ICanGoBack) => {
-  return <button className="absolute left-4" onClick={move}>&larr;</button>
+  return <button className="relative left-4" onClick={move}>&larr;</button>
 }
 
 const Layout = ({ title, canGoBack, hasTabBar, children }: LayoutProps) => {
@@ -32,7 +32,7 @@ const Layout = ({ title, canGoBack, hasTabBar, children }: LayoutProps) => {
       <div
         className={cls(
           !canGoBack ? 'justify-center' : '',
-          'bg-white w-full max-w-lg text-lg font-medium py-3 fixed text-orange-500 border-bottom top-0 flex items-center'
+          'bg-white border-b-[1px] border-orange-200 w-full max-w-lg text-lg font-medium py-3 fixed text-orange-500 border-bottom top-0 flex items-center'
         )}
       >
         {canGoBack && <CanGoBack move={prevMove} />}
@@ -42,7 +42,7 @@ const Layout = ({ title, canGoBack, hasTabBar, children }: LayoutProps) => {
       </div>
       <div className={cls('pt-8', hasTabBar ? 'pb-16' : '')}>{children}</div>
       {hasTabBar && (
-        <nav className="bg-white w-full max-w-lg text-gray-800 border-t fixed bottom-0 pb-6 pt-3 flex justify-between items-center">
+        <nav className="bg-white px-10 w-full max-w-lg text-gray-800 border-t fixed bottom-0 pb-6 pt-3 flex justify-between items-center">
           <Link href="/home">
             <a
               className={cls(

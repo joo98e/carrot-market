@@ -35,10 +35,15 @@
       "static/chunks/main.js",
       "static/chunks/pages/home.js"
     ],
-    "/items/[id]": [
+    "/products/[id]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/items/[id].js"
+      "static/chunks/pages/products/[id].js"
+    ],
+    "/products/upload": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/products/upload.js"
     ]
   },
   "ampFirstPages": []

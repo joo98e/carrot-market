@@ -3,7 +3,7 @@ import Layout from '@components/layout'
 
 const ItemDetail: NextPage = () => {
   return (
-    <Layout canGoBack>
+    <Layout title="아이템 상세" canGoBack>
       <div className="px-4 py-10">
         <div>
           <div className="h-96 bg-slate-200" />

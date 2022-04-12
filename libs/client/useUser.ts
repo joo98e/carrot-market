@@ -7,13 +7,11 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
-const fetcher = async (url: string) => fetch(url).then((res) => res.json())
-
 const useUser = () => {
-  const { data, error } = useSWR('/api/users/me', fetcher)
+  const { data, error } = useSWR('/api/users/me')
   const router = useRouter()
   useEffect(() => {
-    if (!data.profile) {
+    if (data && !data.ok) {
       router.replace('/enter')
     }
   }, [data, router])

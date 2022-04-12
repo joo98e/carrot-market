@@ -21,14 +21,18 @@ const withHandler = ({ method, handler, isPrivate = true }: ConfigType) => {
     res: NextApiResponse
   ): Promise<any> {
     if (req.method !== method) {
+      // 메소드 에러
       return res.status(405).end()
     }
+
     if (isPrivate && !req.session.user) {
+      // 인증되지 않은 요청
       return res.status(401).json({
         ok: false,
         error: 'Unauthorized.',
       })
     }
+
     try {
       await handler(req, res)
     } catch (error) {
