@@ -1,0 +1,49 @@
+import withHandler, { ResponseType } from '@libs/server/withHandler'
+import client from '@libs/server/client'
+import { NextApiRequest, NextApiResponse } from 'next'
+import { withApiSession } from '@libs/server/withSession'
+
+const handler = async (
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseType>
+) => {
+  console.log(req.method)
+  if (req.method === 'GET') {
+    const products = await client.product.findMany({})
+    res.json({
+      ok: true,
+      products,
+    })
+  } else if (req.method === 'POST') {
+    const {
+      body: { name, price, desc },
+      session: { user },
+    } = req
+
+    const product = await client.product.create({
+      data: {
+        name,
+        price: +price,
+        desc,
+        image: 'xx',
+        user: {
+          connect: {
+            id: user?.id,
+          },
+        },
+      },
+    })
+
+    res.json({
+      ok: true,
+      product,
+    })
+  }
+}
+
+export default withApiSession(
+  withHandler({
+    methods: ['GET', 'POST'],
+    handler,
+  })
+)

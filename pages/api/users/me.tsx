@@ -7,7 +7,6 @@ const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) => {
-  
   const profile = await client.user.findUnique({
     where: {
       id: req.session.user?.id,
@@ -22,7 +21,7 @@ const handler = async (
 
 export default withApiSession(
   withHandler({
-    method: 'GET',
+    methods: ['GET'],
     handler,
   })
 )

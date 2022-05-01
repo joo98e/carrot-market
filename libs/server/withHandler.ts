@@ -10,17 +10,18 @@ export interface ResponseType {
 type handler = (req: NextApiRequest, res: NextApiResponse) => void
 
 interface ConfigType {
-  method: httpMethod
+  methods: httpMethod[]
   handler: handler
   isPrivate?: boolean
 }
 
-const withHandler = ({ method, handler, isPrivate = true }: ConfigType) => {
+const withHandler = ({ methods, handler, isPrivate = true }: ConfigType) => {
   return async function (
     req: NextApiRequest,
     res: NextApiResponse
   ): Promise<any> {
-    if (req.method !== method) {
+    if (req.method && !methods.includes(req.method as any)) {
+      console.log(methods)
       // 메소드 에러
       return res.status(405).end()
     }
