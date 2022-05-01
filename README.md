@@ -1,5 +1,5 @@
 # Carrot Market
 carrot-market
 
-# latest viewd lectrues
+# latest viewd lectures
 11.2
