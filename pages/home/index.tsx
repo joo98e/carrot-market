@@ -20,14 +20,14 @@ const Home: NextPage = () => {
     '/api/products',
     fetcher
   )
-  console.log(data)
+  
   return (
     <Layout title="홈" hasTabBar>
       <Head>
         <title>Home</title>
       </Head>
       <div className="flex flex-col space-y-5 divide-y">
-        {data?.products.map((product) => (
+        {data && data?.products.map((product) => (
           <Item
             id={product.id}
             key={product.id}

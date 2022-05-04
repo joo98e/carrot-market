@@ -26,7 +26,6 @@ const useMutation = <T extends any>(url: string): UseMutationResult<T> => {
     })
       // here
       .then((response) => response.json())
-      .catch(() => {})
       .then((data) => setState((prev) => ({ ...prev, data })))
       .catch((error) => setState((prev) => ({ ...prev, error })))
       .finally(() => setState((prev) => ({ ...prev, loading: false })))

@@ -14,8 +14,6 @@ const handler = async (
     },
   })
 
-  console.log(foundToken)
-
   if (!foundToken) return res.status(404).end()
 
   req.session.user = {
