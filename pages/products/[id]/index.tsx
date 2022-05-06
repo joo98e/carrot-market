@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import Layout from '@components/layout'
 import { useRouter } from 'next/router'
-import useSWR from 'swr'
+import useSWR, { useSWRConfig } from 'swr'
 import { Product, User } from '.prisma/client'
 import Link from 'next/link'
 import useMutation from '@libs/client/useMutation'
@@ -22,12 +22,18 @@ interface IItemDetailResponse {
 
 const ItemDetail: NextPage = () => {
   const router = useRouter()
-  const { data } = useSWR<IItemDetailResponse>(
+  const { fallbackData, mutate } = useSWRConfig()
+  const { data, mutate: boundMutate } = useSWR<IItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null
   )
   const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`)
 
   const onFavClick = () => {
+    if (!data) return false
+    boundMutate({ ...data, isLiked: !data.isLiked }, false)
+
+    // 다른 swr의 데이터를 가져온다. 두번째 인자부터 생략하면, refetch가 일어난다.
+    // mutate('/api/users', (prev: any) => ({ ...prev }), false)
     toggleFav({})
   }
 
@@ -51,12 +57,14 @@ const ItemDetail: NextPage = () => {
           </div>
           <div className="mt-5">
             <h1 className="text-3xl font-extrabold text-gray-900">
-              {data?.product.name ?? '이름이..'}
+              {data?.product.name ?? '이 물건의..'}
             </h1>
             <span className="text-3xl mt-3 text-gray-900">
-              ₩{data?.product.price ?? '가격'}
+              ₩{data?.product.price ?? '가격이...'}
             </span>
-            <p className="text-base my-6 text-gray-700">{data?.product.desc}</p>
+            <p className="text-base my-6 text-gray-700">
+              {data?.product.desc ?? '설명이...'}
+            </p>
             <div className="flex items-center justify-between space-x-2">
               {/* 버튼 컴포넌트를 만드는 것이 좋음 */}
               <button className="flex-1 bg-orange-500 text-white py-3 rounded-md shadow-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 font-medium hover:bg-orange-600 transition-colors">

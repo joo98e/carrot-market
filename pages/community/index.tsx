@@ -63,7 +63,6 @@ const Community: NextPage = () => {
           )
         })}
         <FloatingButton href="/community/write">
-          <button className="fixed bottom-24 right-5 bg-orange-400 hover:bg-orange-500 cursor-pointer transition-colors rounded-full p-4 text-white shadow-xl"></button>
           <svg
             className="w-6 h-6"
             fill="none"

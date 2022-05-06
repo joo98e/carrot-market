@@ -6,6 +6,7 @@ import Input from '@components/input'
 import useMutation from '@libs/client/useMutation'
 import { cls } from '@libs/client/utils'
 import { useRouter } from 'next/router'
+import useUser from '@libs/client/useUser'
 
 interface IEnterForm {
   email?: string
@@ -23,6 +24,7 @@ interface MutationResult {
 }
 
 const Enter: NextPage = () => {
+  const { user, isLoading: userLoading } = useUser()
   const [enter, { loading, data, error }] =
     useMutation<MutationResult>('/api/users/enter')
   const [confirmToken, { loading: tokenLoading, data: tokenData }] =
@@ -32,7 +34,7 @@ const Enter: NextPage = () => {
     useForm<ITokenForm>()
   const [method, setMethod] = useState<'email' | 'phone'>('email')
   const router = useRouter()
-  
+
   const onEmailClick = () => {
     setMethod('email')
     reset()
@@ -52,10 +54,11 @@ const Enter: NextPage = () => {
     confirmToken(validForm)
   }
   useEffect(() => {
+    if (!userLoading && user) router.replace('/home')
     if (tokenData?.ok) {
       router.replace('/home')
     }
-  }, [tokenData, router])
+  }, [tokenData, router, userLoading, user])
 
   return (
     <div className="mt-16 px-4">
