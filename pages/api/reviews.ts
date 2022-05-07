@@ -8,30 +8,31 @@ const handler = async (
   res: NextApiResponse<ResponseType>
 ) => {
   const {
-    body: { question },
     session: { user },
   } = req
-
-  const post = await client.post.create({
-    data: {
-      question,
-      user: {
-        connect: {
-          id: user?.id,
+  const reviews = await client.review.findMany({
+    where: {
+      createdForId: user?.id,
+    },
+    include: {
+      createdBy: {
+        select: {
+          id: true,
+          name: true,
+          avatar: true,
         },
       },
     },
   })
-
   return res.status(200).json({
     ok: true,
-    post,
+    reviews,
   })
 }
 
 export default withApiSession(
   withHandler({
-    methods: ['POST'],
+    methods: ['GET'],
     handler,
   })
 )

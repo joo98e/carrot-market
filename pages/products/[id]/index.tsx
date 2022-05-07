@@ -30,6 +30,8 @@ const ItemDetail: NextPage = () => {
 
   const onFavClick = () => {
     if (!data) return false
+    // false를 하는 이유 : 로컬 상태를 유지하기 위해(검증을 위한 swr의 재요청으로 인해 다시 돌아와버리기 때문)
+    // 반드시 api가 이루어진다는 가정 하에 정확한 ui가 될 것 같음.
     boundMutate({ ...data, isLiked: !data.isLiked }, false)
 
     // 다른 swr의 데이터를 가져온다. 두번째 인자부터 생략하면, refetch가 일어난다.

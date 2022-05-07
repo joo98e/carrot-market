@@ -1,6 +1,6 @@
 import React from 'react'
 
-const IconHeartSolid = () => {
+const HeartSolidIcon = () => {
   return (
     <svg
       className="w-6 h-6"
@@ -17,4 +17,4 @@ const IconHeartSolid = () => {
   )
 }
 
-export default IconHeartSolid
+export default HeartSolidIcon

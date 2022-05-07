@@ -1,6 +1,6 @@
 import React from 'react'
 
-const IconHeart = () => {
+const HeartIcon = () => {
   return (
     <svg
       className="h-6 w-6 "
@@ -20,4 +20,4 @@ const IconHeart = () => {
   )
 }
 
-export default IconHeart
+export default HeartIcon

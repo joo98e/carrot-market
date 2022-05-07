@@ -1,17 +1,18 @@
-/*
- * carrot-market
- */
-
-import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
+import { User } from '.prisma/client'
 
-const useUser = () => {
+interface IUser {
+  user: User
+  isLoading: boolean
+}
+
+const useUser = (): IUser => {
   const { data, error } = useSWR('/api/users/me')
   const router = useRouter()
   useEffect(() => {
-    if (data && !data.ok) {
+    if (data && !data?.ok) {
       router.replace('/enter')
     }
   }, [data, router])

@@ -8,7 +8,7 @@ import useSWR from 'swr'
 import { Product } from '@prisma/client'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
-interface ProductWithCount extends Product {
+export interface ProductWithCount extends Product {
   _count: {
     favs: number
   }
@@ -21,7 +21,7 @@ interface IResponseTypeOfProducts {
 const Home: NextPage = () => {
   const { user, isLoading } = useUser()
   const { data, error } = useSWR<IResponseTypeOfProducts>(
-    '/api/products',
+    user ? '/api/products' : null,
     fetcher
   )
 
