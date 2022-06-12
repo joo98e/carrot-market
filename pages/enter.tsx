@@ -24,7 +24,7 @@ interface MutationResult {
 }
 
 const Enter: NextPage = () => {
-  const {} = useUser();
+  const {} = useUser()
   const [enter, { loading, data, error }] =
     useMutation<MutationResult>('/api/users/enter')
   const [confirmToken, { loading: tokenLoading, data: tokenData }] =
@@ -51,8 +51,10 @@ const Enter: NextPage = () => {
 
   const onTokenValid = async (validForm: ITokenForm) => {
     if (tokenLoading) return
-    confirmToken(validForm)
+
+    confirmToken(validForm);
   }
+
   useEffect(() => {
     if (tokenData?.ok) {
       router.replace('/home')

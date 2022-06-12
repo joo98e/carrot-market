@@ -1,6 +1,15 @@
+import useUser from '@libs/client/useUser'
 import type { NextPage } from 'next'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 const Home: NextPage = () => {
+  const router = useRouter()
+
+  useEffect(() => {
+    router.replace('/home')
+  })
+
   return (
     <div className="bg-violet-300 py-20 px-5 grid gap-10 lg:grid-cols-3 md:grid-cols-2 space-y-5 min-h-screen">
       <div className="bg-white p-10 rounded-2xl shadow-xl group">

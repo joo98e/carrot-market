@@ -6,9 +6,9 @@ interface InputProps {
   kind?: 'text' | 'phone' | 'price'
   register?: UseFormRegisterReturn
   type: string
-  required: boolean
+  required?: boolean
   placeholder?: string
-  // [key: string]: any;
+  [key: string]: any;
 }
 
 export default function Input({
@@ -19,9 +19,10 @@ export default function Input({
   type,
   required,
   placeholder,
+  ...rest
 }: InputProps) {
   return (
-    <div>
+    <div {...rest}>
       <label
         className="mb-1 block text-sm font-medium text-gray-700"
         htmlFor={name}

@@ -7,21 +7,114 @@ const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) => {
-  const profile = await client.user.findUnique({
-    where: {
-      id: req.session.user?.id,
-    },
-  })
+  if (req.method === 'GET') {
+    const profile = await client.user.findUnique({
+      where: {
+        id: req.session.user?.id,
+      },
+    })
 
-  return res.status(200).json({
-    ok: true,
-    profile,
-  })
+    return res.status(200).json({
+      ok: true,
+      profile,
+    })
+  }
+
+  if (req.method === 'POST') {
+    const {
+      session: { user },
+      body: { email, phone, name },
+    } = req
+
+    const currentUser = await client.user.findUnique({
+      where: {
+        id: user?.id,
+      },
+      select: {
+        id: true,
+        email: true,
+        phone: true,
+      },
+    })
+
+    if (email && email !== currentUser?.email) {
+      const alreadyExists = Boolean(
+        await client.user.findUnique({
+          where: {
+            email,
+          },
+          select: {
+            id: true,
+          },
+        })
+      )
+
+      if (alreadyExists) {
+        return res.status(200).json({
+          ok: false,
+          error: '이미 존재하는 이메일입니다.',
+        })
+      }
+
+      await client.user.update({
+        where: {
+          id: user?.id,
+        },
+        data: {
+          email,
+        },
+      })
+    }
+
+    if (phone && phone !== currentUser?.phone) {
+      const alreadyExists = Boolean(
+        await client.user.findUnique({
+          where: {
+            phone,
+          },
+          select: {
+            id: true,
+          },
+        })
+      )
+
+      if (alreadyExists) {
+        return res.status(200).json({
+          ok: false,
+          error: '이미 존재하는 번호입니다.',
+        })
+      }
+
+      await client.user.update({
+        where: {
+          id: user?.id,
+        },
+        data: {
+          phone,
+        },
+      })
+    }
+
+    if (name) {
+      await client.user.update({
+        where: {
+          id: user?.id,
+        },
+        data: {
+          name,
+        },
+      })
+    }
+
+    res.status(200).json({
+      ok: true,
+    })
+  }
 }
 
 export default withApiSession(
   withHandler({
-    methods: ['GET'],
+    methods: ['GET', 'POST'],
     handler,
   })
 )

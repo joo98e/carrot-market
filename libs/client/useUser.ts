@@ -4,18 +4,25 @@ import useSWR from 'swr'
 import { User } from '.prisma/client'
 
 interface IUser {
-  user: User
+  user?: User
   isLoading: boolean
+  isPrivate?: boolean
 }
 
-const useUser = (): IUser => {
-  const { data, error } = useSWR('/api/users/me')
+interface IProfileResponse {
+  ok: boolean
+  profile: User
+}
+
+const useUser = (isPrivate = true): IUser => {
+  const { data, error } = useSWR<IProfileResponse>('/api/users/me')
   const router = useRouter()
+
   useEffect(() => {
     if (data && !data?.ok) {
-      router.replace('/enter')
+      isPrivate && router.replace('/enter')
     }
-  }, [data, router])
+  }, [data, router, isPrivate])
   return { user: data?.profile, isLoading: !data && !error }
 }
 
