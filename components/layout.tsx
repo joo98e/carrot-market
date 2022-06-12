@@ -28,7 +28,7 @@ const Layout = ({ title, canGoBack, hasTabBar, children }: LayoutProps) => {
   }
 
   return (
-    <div className="max-w-lg pt-8">
+    <div className="max-w-lg pt-8 mx-auto">
       <div
         className={cls(
           !canGoBack ? 'justify-center' : '',
@@ -118,11 +118,11 @@ const Layout = ({ title, canGoBack, hasTabBar, children }: LayoutProps) => {
               </svg>
             </a>
           </Link>
-          <Link href="/live">
+          <Link href="/stream">
             <a
               className={cls(
                 'flex flex-col items-center space-y-2 ',
-                router.pathname === '/live'
+                router.pathname === '/stream'
                   ? 'text-orange-500'
                   : 'hover:text-gray-500 transition-colors'
               )}
