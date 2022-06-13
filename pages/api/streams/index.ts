@@ -12,7 +12,12 @@ const handler = async (
   } = req
 
   if (req.method === 'GET') {
-    const streams = await client.stream.findMany({})
+    const streams = await client.stream.findMany({
+      take: 10,
+      orderBy : {
+        createdAt : "desc"
+      }
+    })
 
     res.status(200).json({
       ok: true,
