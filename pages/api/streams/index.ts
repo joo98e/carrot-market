@@ -12,16 +12,20 @@ const handler = async (
   } = req
 
   if (req.method === 'GET') {
+    const { page = 0 } = req.query
+    const streamCount = await client.stream.count()
     const streams = await client.stream.findMany({
-      take: 10,
-      orderBy : {
-        createdAt : "desc"
-      }
+      take: Number(process.env.API_GET_UNIT_COUNT) ?? 5,
+      orderBy: {
+        createdAt: 'desc',
+      },
+      skip: +page * Number(process.env.NEXT_PUBLIC_PAGINATION_UNIT) ?? 5,
     })
 
     res.status(200).json({
       ok: true,
       streams,
+      streamCount,
     })
   } else if (req.method === 'POST') {
     const { name, price, desc } = req.body
