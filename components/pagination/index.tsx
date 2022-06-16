@@ -4,9 +4,7 @@ import React, { useEffect, useState } from 'react'
 interface IProps {
   total?: number
   unit?: number
-  action: <T extends any>(num: number) => T
-  page: number
-  setPage: React.Dispatch<React.SetStateAction<number>>
+  action: (num: number) => any
 }
 
 const bgStyle = [
@@ -14,27 +12,20 @@ const bgStyle = [
   'bg-gray-400 cursor-default',
 ]
 
-const Pagination = ({
-  total: value = 10,
-  unit = 3,
-  page,
-  setPage,
-  action,
-}: IProps) => {
+const Pagination = ({ total: value = 10, unit = 3, action }: IProps) => {
   const [total, setTotal] = useState(1)
+  const [current, setCurrent] = useState(0)
   const arr = [...Array.from(Array(value).keys())] ?? [0]
 
   const onIncrease = () => {
-    if (page === total) return
-    setPage((prev: number) => {
-      action(page + 1)
+    if (current === total) return
+    setCurrent((prev) => {
       return prev + 1
     })
   }
   const onDecrease = () => {
-    if (page === 0) return
-    setPage((prev: number) => {
-      action(page - 1)
+    if (current === 0) return
+    setCurrent((prev) => {
       return prev - 1
     })
   }
@@ -52,17 +43,18 @@ const Pagination = ({
           onClick={onDecrease}
           className={cls(
             'font-semibold px-2 py-1 text-white select-none cursor-pointer rounded-md',
-            page !== 0 ? bgStyle[0] : bgStyle[1]
+            current !== 0 ? bgStyle[0] : bgStyle[1]
           )}
         >
           Prev
         </div>
         <div className="flex space-x-4">
-          {arr.slice(page * unit, (page + 1) * unit).map((_, i) => {
+          {arr.slice(current * unit, (current + 1) * unit).map((_, i) => {
             return (
               <div
-                className="hover:bg-orange-500 border-0 aspect-square border-transparent transition-colors cursor-pointer shadow-xl bg-orange-400 text-md rounded-full w-8 flex items-center justify-center text-white"
                 key={i}
+                className="hover:bg-orange-500 border-0 aspect-square border-transparent transition-colors cursor-pointer shadow-xl bg-orange-400 text-md rounded-full w-8 flex items-center justify-center text-white"
+                onClick={() => action(_)}
               >
                 {_ + 1}
               </div>
@@ -73,7 +65,7 @@ const Pagination = ({
           onClick={onIncrease}
           className={cls(
             'font-semibold px-2 py-1 text-white select-none cursor-pointer rounded-md',
-            page !== total ? bgStyle[0] : bgStyle[1]
+            current !== total ? bgStyle[0] : bgStyle[1]
           )}
         >
           Next

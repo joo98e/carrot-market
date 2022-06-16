@@ -21,7 +21,11 @@ const Stream: NextPage = () => {
   const [page, setPage] = useState<number>(0)
   const { data } = useSWR<IStreamsResponse>(`/api/streams?page=${page}`)
 
+  const pageChange = (num: number) => {
+    setPage(num)
+  }
   useEffect(() => {}, [page])
+
   return (
     <Layout hasTabBar title="라이브">
       <div className=" divide-y-[1px] space-y-4">
@@ -54,9 +58,7 @@ const Stream: NextPage = () => {
         <Pagination
           unit={3}
           total={data?.streamCount}
-          page={page}
-          setPage={setPage}
-          action={(num): any => console.log(num)}
+          action={(num) => pageChange(num)}
         />
       </div>
     </Layout>
