@@ -2,8 +2,7 @@
 
 ## latest viewd lectures
 ```
-14.5
-14.6을 보아야함
+15.7, 비동기 처리 공부 + cloudflare 이용
 ```
 
 ## keyword

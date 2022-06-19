@@ -11,6 +11,7 @@ import useUser from '@libs/client/useUser'
 import { useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import { IIpIoResponse } from 'pages/api/files'
 
 interface IEditProfileForm {
   email?: string
@@ -23,6 +24,12 @@ interface IEditProfileForm {
 interface IEditProfileResponse {
   ok: boolean
   error?: string
+}
+
+interface IIpResponse {
+  ok: boolean
+  result: IIpIoResponse
+  message?: string
 }
 
 const EditProfile: NextPage = () => {
@@ -41,10 +48,8 @@ const EditProfile: NextPage = () => {
     formState: { errors },
   } = useForm<IEditProfileForm>()
   const avatar = watch('avatar')
-  const onValid = ({ name, email, phone, avatar }: IEditProfileForm) => {
+  const onValid = async ({ name, email, phone, avatar }: IEditProfileForm) => {
     clearErrors()
-    console.log(avatar)
-    return false
     if (loading) return false
 
     if (email === '' && phone === '' && name === '') {
@@ -53,7 +58,33 @@ const EditProfile: NextPage = () => {
       })
     }
 
-    editProfile({ email, phone, name })
+    if (avatar && avatar.length > 0 && user?.id) {
+      const cloudFlareRequest: IIpResponse = await (
+        await fetch('/api/files')
+      ).json()
+
+      if (cloudFlareRequest && !cloudFlareRequest.ok) {
+        return console.log(cloudFlareRequest.message)
+      }
+
+      const form = new FormData()
+      form.append('file', avatar[0], user?.id + '')
+      form.append('name', 'file test')
+
+      const fake = await (
+        // fetch 원래는 아래 주소와 같이 해야 함
+        // fetch(cloudFlareRequest.result.uploadURL, ...)
+        await fetch('/api/files/fake', {
+          method: 'POST',
+          body: form,
+        })
+      ).json()
+
+      return console.log(fake)
+      // editProfile({ email, phone, name })
+    } else {
+      editProfile({ email, phone, name })
+    }
   }
 
   useEffect(() => {
