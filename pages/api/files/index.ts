@@ -35,38 +35,39 @@ const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<IResponseType>
 ) => {
-  //   const response:ICFResponse = await (
-  //     await fetch(
-  //       `https://api.cloudflare.com/client/v4/accounts/${process.env.CF_ID}/images/v1/direct_upload`,
-  //       {
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           Authorization: `Bearer ${process.env.CF_TOKEN}`,
-  //         },
-  //       }
-  //     )
-  //   ).json()
-
-  const ip: IIpIoResponse = await (
-    await fetch(`https://ipinfo.io/?token=${process.env.IPIO_TOKEN}`)
+  const response: ICFResponse = await (
+    await fetch(
+      `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUD_FLARE_ID}/images/v1/direct_upload`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${process.env.CLOUD_FLARE_TOKEN}`,
+        },
+      }
+    )
   ).json()
 
-  if (ip) {
-    res.status(200).json({
-      ok: true,
-      result: { ...ip },
-    })
-  } else {
-    res.status(500).json({
-      ok: false,
-      messages: 'API 요청에 실패하였습니다.',
-    })
-  }
+  // 연습용
+  // const ip: IIpIoResponse = await (
+  //   await fetch(`https://ipinfo.io/?token=${process.env.IPIO_TOKEN}`)
+  // ).json()
+
+  // if (ip) {
+  //   res.status(200).json({
+  //     ok: true,
+  //     result: { ...ip },
+  //   })
+  // } else {
+  //   res.status(500).json({
+  //     ok: false,
+  //     messages: 'API 요청에 실패하였습니다.',
+  //   })
+  // }
 }
 
 export default withApiSession(
   withHandler({
-    methods: ['GET'],
+    methods: ['POST'],
     handler,
   })
 )

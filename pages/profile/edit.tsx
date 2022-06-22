@@ -63,25 +63,27 @@ const EditProfile: NextPage = () => {
         await fetch('/api/files')
       ).json()
 
+      console.log(cloudFlareRequest)
+
       if (cloudFlareRequest && !cloudFlareRequest.ok) {
         return console.log(cloudFlareRequest.message)
       }
 
-      const form = new FormData()
-      form.append('file', avatar[0], user?.id + '')
-      form.append('name', 'file test')
+      // const form = new FormData()
+      // form.append('file', avatar[0], user?.id + '')
+      // form.append('name', 'file test')
 
-      const fake = await (
-        // fetch 원래는 아래 주소와 같이 해야 함
-        // fetch(cloudFlareRequest.result.uploadURL, ...)
-        await fetch('/api/files/fake', {
-          method: 'POST',
-          body: form,
-        })
-      ).json()
+      // const fake = await (
+      //   // fetch 원래는 아래 주소와 같이 해야 함
+      //   // fetch(cloudFlareRequest.result.uploadURL, ...)
+      //   await fetch('/api/files/fake', {
+      //     method: 'POST',
+      //     body: form,
+      //   })
+      // ).json()
 
       return console.log(fake)
-      // editProfile({ email, phone, name })
+      // editProfile({ email, phone, name }) file 추가해서 하기
     } else {
       editProfile({ email, phone, name })
     }
