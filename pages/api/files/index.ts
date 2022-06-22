@@ -27,7 +27,7 @@ export interface IIpIoResponse {
 
 export interface IResponseType {
   ok: boolean
-  result?: IIpIoResponse
+  result?: ICFResponse
   messages?: string
 }
 
@@ -37,15 +37,29 @@ const handler = async (
 ) => {
   const response: ICFResponse = await (
     await fetch(
-      `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUD_FLARE_ID}/images/v1/direct_upload`,
+      `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUD_FLARE_ID}/images/v2/direct_upload`,
       {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${process.env.CLOUD_FLARE_TOKEN}`,
         },
+        method: 'POST',
       }
     )
   ).json()
+
+  if (!response || !response.result.uploadURL) {
+    res.status(500).json({
+      ok: false,
+      messages:
+        '클라우드 플레어 DCU(Direct Creator Upload) 생성에 실패했습니다.',
+    })
+  } else {
+    res.status(200).json({
+      ok: true,
+      ...response.result,
+    })
+  }
 
   // 연습용
   // const ip: IIpIoResponse = await (
@@ -67,7 +81,7 @@ const handler = async (
 
 export default withApiSession(
   withHandler({
-    methods: ['POST'],
+    methods: ['GET'],
     handler,
   })
 )

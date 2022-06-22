@@ -26,18 +26,28 @@ interface IEditProfileResponse {
   error?: string
 }
 
-interface IIpResponse {
+interface ICloudFlareDCUResponse {
   ok: boolean
-  result: IIpIoResponse
+  id: string | undefined
+  uploadURL: string | undefined
   message?: string
+}
+
+interface ICloudFlareDCUActionResponse {
+  result?: {
+    id?: string
+    filename?: string
+    uploaded?: string
+    requireSignedURLs?: string
+    variants?: string[]
+  }
 }
 
 const EditProfile: NextPage = () => {
   const router = useRouter()
   const { user } = useUser()
   const [avatarPreview, setAvatarPreview] = useState<string>('')
-  const [editProfile, { loading, data }] =
-    useMutation<IEditProfileResponse>(`/api/users/me`)
+  const [editProfile, { loading, data }] = useMutation<IEditProfileResponse>(`/api/users/me`)
   const {
     register,
     handleSubmit,
@@ -59,31 +69,33 @@ const EditProfile: NextPage = () => {
     }
 
     if (avatar && avatar.length > 0 && user?.id) {
-      const cloudFlareRequest: IIpResponse = await (
-        await fetch('/api/files')
-      ).json()
+      const cloudFlareRequest: ICloudFlareDCUResponse = await (await fetch('/api/files')).json()
 
-      console.log(cloudFlareRequest)
-
-      if (cloudFlareRequest && !cloudFlareRequest.ok) {
+      if (cloudFlareRequest && !cloudFlareRequest.ok && !cloudFlareRequest.uploadURL) {
         return console.log(cloudFlareRequest.message)
       }
 
-      // const form = new FormData()
-      // form.append('file', avatar[0], user?.id + '')
-      // form.append('name', 'file test')
+      const form = new FormData()
+      form.append('file', avatar[0], `avatar_${user.id}`)
+
+      const {
+        result: { id },
+      } = await (
+        await fetch(cloudFlareRequest.uploadURL!, {
+          method: 'POST',
+          body: form,
+        })
+      ).json()
+
+      editProfile({ email, phone, name, avatarId: id })
 
       // const fake = await (
       //   // fetch 원래는 아래 주소와 같이 해야 함
-      //   // fetch(cloudFlareRequest.result.uploadURL, ...)
       //   await fetch('/api/files/fake', {
       //     method: 'POST',
       //     body: form,
       //   })
       // ).json()
-
-      return console.log(fake)
-      // editProfile({ email, phone, name }) file 추가해서 하기
     } else {
       editProfile({ email, phone, name })
     }
@@ -94,6 +106,10 @@ const EditProfile: NextPage = () => {
       user.email && setValue('email', user.email)
       user.phone && setValue('phone', user.phone)
       user.name && setValue('name', user.name)
+      user.avatar &&
+        setAvatarPreview(
+          `https://imagedelivery.net/PQiTCCXQwNASghVAHpWmhQ/${user?.avatar}/resizeCover`
+        )
     }
   }, [setValue, user])
 
@@ -124,10 +140,7 @@ const EditProfile: NextPage = () => {
       <form onSubmit={handleSubmit(onValid)} className="py-10 px-4 space-y-4">
         <div className="flex items-center space-x-3">
           {avatarPreview ? (
-            <img
-              className="w-14 h-14 rounded-full bg-slate-500"
-              src={avatarPreview}
-            />
+            <img className="w-14 h-14 rounded-full bg-slate-500" src={avatarPreview} />
           ) : (
             <div className="w-14 h-14 rounded-full bg-slate-500" />
           )}

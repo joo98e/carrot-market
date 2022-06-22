@@ -3,10 +3,7 @@ import client from '@libs/server/client'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { withApiSession } from '@libs/server/withSession'
 
-const handler = async (
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseType>
-) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseType>) => {
   if (req.method === 'GET') {
     const profile = await client.user.findUnique({
       where: {
@@ -23,7 +20,7 @@ const handler = async (
   if (req.method === 'POST') {
     const {
       session: { user },
-      body: { email, phone, name },
+      body: { email, phone, name, avatarId },
     } = req
 
     const currentUser = await client.user.findUnique({
@@ -102,6 +99,18 @@ const handler = async (
         },
         data: {
           name,
+        },
+      })
+    }
+
+    if (avatarId) {
+      console.log(avatarId)
+      await client.user.update({
+        where: {
+          id: user?.id,
+        },
+        data: {
+          avatar: avatarId,
         },
       })
     }
