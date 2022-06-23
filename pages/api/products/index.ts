@@ -3,10 +3,7 @@ import client from '@libs/server/client'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { withApiSession } from '@libs/server/withSession'
 
-const handler = async (
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseType>
-) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseType>) => {
   if (req.method === 'GET') {
     const products = await client.product.findMany({
       include: {
@@ -23,7 +20,7 @@ const handler = async (
     })
   } else if (req.method === 'POST') {
     const {
-      body: { name, price, desc },
+      body: { name, price, desc, photoId },
       session: { user },
     } = req
 
@@ -32,7 +29,7 @@ const handler = async (
         name,
         price: +price,
         desc,
-        image: 'xx',
+        image: photoId ? photoId : 'xx',
         user: {
           connect: {
             id: user?.id,

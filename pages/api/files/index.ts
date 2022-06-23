@@ -3,6 +3,13 @@ import client from '@libs/server/client'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { withApiSession } from '@libs/server/withSession'
 
+export interface ICloudFlareDCUResponse {
+  ok: boolean
+  id: string | undefined
+  uploadURL: string | undefined
+  message?: string
+}
+
 interface ICFResponse {
   result: {
     id: string

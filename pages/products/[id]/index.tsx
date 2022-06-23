@@ -8,6 +8,7 @@ import useMutation from '@libs/client/useMutation'
 import { cls } from '@libs/client/utils'
 import IconHeartSolid from '@components/icons/heartSolid'
 import IconHeart from '@components/icons/heart'
+import Image from 'next/image'
 
 interface ProductWithUser extends Product {
   user: User
@@ -43,29 +44,47 @@ const ItemDetail: NextPage = () => {
     <Layout title="아이템 상세" canGoBack>
       <div className="px-4 py-10">
         <div>
-          <div className="h-96 bg-slate-200" />
+          {data?.product.image ? (
+            <div className="w-full h-auto flex justify-center">
+              {/* <Image
+                src={`https://imagedelivery.net/PQiTCCXQwNASghVAHpWmhQ/${data.product.image}/public`}
+                alt="제품 사진"
+                width={24}
+                height={24}
+              /> */}
+            </div>
+          ) : (
+            <div className="h-96 bg-slate-200" />
+          )}
           <div className="flex border-b mt-1 py-3 items-center space-x-3 cursor-pointer">
-            <div className="w-12 h-12 rounded-full bg-slate-300" />
+            {data?.product.user.avatar ? (
+              <Image
+                src={`https://imagedelivery.net/PQiTCCXQwNASghVAHpWmhQ/${data?.product.user.avatar}/resizeCover`}
+                alt="판매자"
+                width={48}
+                height={48}
+              />
+            ) : (
+              <div className="w-12 h-12 rounded-full bg-slate-300" />
+            )}
             <div>
               <p className="text-sm font-medium text-gray-500">
                 {data?.product.user?.name ?? '이름이..'}
               </p>
-              <Link href={`/users/profiles/${data?.product.user?.id}`}>
-                <a className="text-sm font-medium text-gray-700">
-                  View profile &rarr;
-                </a>
+              <Link href={`/profiles/${data?.product.user?.id}`}>
+                <a className="text-sm font-medium text-gray-700">View profile &rarr;</a>
               </Link>
             </div>
           </div>
           <div className="mt-5">
             <h1 className="text-3xl font-extrabold text-gray-900">
-              {data?.product.name ?? '이 물건의..'}
+              {data?.product.name ?? '이 물건은..'}
             </h1>
             <span className="text-3xl mt-3 text-gray-900">
-              ₩{data?.product.price ?? '가격이...'}
+              ₩{data?.product.price ?? '가격이..'}
             </span>
             <p className="text-base my-6 text-gray-700">
-              {data?.product.desc ?? '설명이...'}
+              {data?.product.desc ?? '그리고 설명이..'}
             </p>
             <div className="flex items-center justify-between space-x-2">
               {/* 버튼 컴포넌트를 만드는 것이 좋음 */}
@@ -93,12 +112,8 @@ const ItemDetail: NextPage = () => {
               <Link href={`/products/${product.id}`} key={product.id}>
                 <a>
                   <div className="h-56 w-full bg-slate-300" />
-                  <h3 className="text-sm text-gray-700 -mb-1">
-                    {product.name}
-                  </h3>
-                  <span className="text-xs font-medium text-gray-700">
-                    ₩{product.price}
-                  </span>
+                  <h3 className="text-sm text-gray-700 -mb-1">{product.name}</h3>
+                  <span className="text-xs font-medium text-gray-700">₩{product.price}</span>
                 </a>
               </Link>
             ))}

@@ -11,6 +11,7 @@ const handler = async (
     query: { id },
     session: { user },
   } = req
+  
   const product = await client.product.findUnique({
     where: { id: +id },
     include: {
@@ -23,6 +24,7 @@ const handler = async (
       },
     },
   })
+
   const terms = product?.name.split(' ').map((word) => ({
     name: {
       contains: word,

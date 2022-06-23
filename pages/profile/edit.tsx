@@ -11,7 +11,7 @@ import useUser from '@libs/client/useUser'
 import { useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { IIpIoResponse } from 'pages/api/files'
+import { ICloudFlareDCUResponse, IIpIoResponse } from 'pages/api/files'
 
 interface IEditProfileForm {
   email?: string
@@ -24,13 +24,6 @@ interface IEditProfileForm {
 interface IEditProfileResponse {
   ok: boolean
   error?: string
-}
-
-interface ICloudFlareDCUResponse {
-  ok: boolean
-  id: string | undefined
-  uploadURL: string | undefined
-  message?: string
 }
 
 interface ICloudFlareDCUActionResponse {
