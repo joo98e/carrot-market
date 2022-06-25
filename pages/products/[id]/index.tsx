@@ -45,13 +45,13 @@ const ItemDetail: NextPage = () => {
       <div className="px-4 py-10">
         <div>
           {data?.product.image ? (
-            <div className="w-full h-auto flex justify-center">
-              {/* <Image
+            <div className="relative h-48">
+              <Image
+                className="object-contain"
                 src={`https://imagedelivery.net/PQiTCCXQwNASghVAHpWmhQ/${data.product.image}/public`}
                 alt="제품 사진"
-                width={24}
-                height={24}
-              /> */}
+                layout="fill"
+              />
             </div>
           ) : (
             <div className="h-96 bg-slate-200" />
