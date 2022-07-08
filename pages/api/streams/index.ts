@@ -3,10 +3,7 @@ import client from '@libs/server/client'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { withApiSession } from '@libs/server/withSession'
 
-const handler = async (
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseType>
-) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseType>) => {
   const {
     session: { user },
   } = req
@@ -29,6 +26,11 @@ const handler = async (
     })
   } else if (req.method === 'POST') {
     const { name, price, desc } = req.body
+    const tmp = {
+      cloudflareId: '0',
+      cloudflareUrl: '0',
+      cloudflareKey: '0',
+    }
     const stream = await client.stream.create({
       data: {
         name,
@@ -39,6 +41,7 @@ const handler = async (
             id: user?.id,
           },
         },
+        ...tmp,
       },
     })
 

@@ -17,8 +17,6 @@ async function main() {
         },
       },
     })
-
-    console.log(`${idx}/500`)
   })
 }
 

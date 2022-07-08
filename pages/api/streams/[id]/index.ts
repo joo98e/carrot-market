@@ -3,20 +3,20 @@ import client from '@libs/server/client'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { withApiSession } from '@libs/server/withSession'
 
-const handler = async (
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseType>
-) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseType>) => {
   const { id } = req.query
 
   const stream = await client.stream.findUnique({
     where: {
       id: +id.toString(), // why?
     },
-    include: {
+    select: {
+      cloudflareId: true,
+      // ...
       messages: {
         select: {
           id: true,
+          streamId: true,
           message: true,
           user: {
             select: {
