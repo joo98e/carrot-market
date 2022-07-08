@@ -28,6 +28,7 @@ export default function ProductList({ kind }: IProductListProps) {
           price={record.product.price}
           hearts={record.product._count.favs}
           comments={1}
+          image={''}
         />
       ))}
     </>
