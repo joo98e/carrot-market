@@ -16,7 +16,7 @@ export function middleware(req: NextRequest, ev: NextFetchEvent) {
   //   }
 
   if (!req.url.includes('/api')) {
-    if (!req.url.includes('enter') && !req.cookies.carrotSession) {
+    if (!req.url.includes('enter') && !req.cookies['carrot-session']) {
       const url = req.nextUrl.clone()
       url.pathname = '/enter'
       return NextResponse.rewrite(url)

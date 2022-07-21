@@ -4,7 +4,8 @@ import Item from '@components/item'
 import Layout from '@components/layout'
 import useUser from '@libs/client/useUser'
 import Head from 'next/head'
-import useSWR from 'swr'
+import useSWR, { SWRConfig } from 'swr'
+import client from '@libs/server/client'
 import { Product } from '@prisma/client'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
@@ -28,18 +29,17 @@ const Home: NextPage = () => {
         <title>Home</title>
       </Head>
       <div className="flex flex-col space-y-5 divide-y">
-        {data &&
-          data?.products.map((product) => (
-            <Item
-              id={product.id}
-              key={product.id}
-              title={product.name}
-              price={product.price}
-              comments={1}
-              hearts={product._count.favs}
-              image={product.image}
-            />
-          ))}
+        {data?.products.map((product) => (
+          <Item
+            id={product.id}
+            key={product.id}
+            title={product.name}
+            price={product.price}
+            comments={1}
+            hearts={product._count.favs || 0}
+            image={product.image}
+          />
+        ))}
         <FloatingButton href="/products/upload">
           <svg
             className="h-6 w-6"
@@ -62,4 +62,32 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+const PageBySWRConfig: NextPage<{ products: ProductWithCount[] }> = ({ products }) => {
+  return (
+    <SWRConfig
+      value={{
+        // fallback : 대체, 이 데이터로 캐시 초기값을 설정한다.
+        fallback: {
+          '/api/products': {
+            ok: true,
+            products,
+          },
+        },
+      }}
+    >
+      <Home />
+    </SWRConfig>
+  )
+}
+
+export async function getServerSideProps() {
+  const products = await client.product.findMany({})
+
+  return {
+    props: {
+      products: JSON.parse(JSON.stringify(products)),
+    },
+  }
+}
+
+export default PageBySWRConfig

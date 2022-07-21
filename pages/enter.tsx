@@ -11,6 +11,7 @@ import dynamic from 'next/dynamic'
 
 // const Bs = dynamic(() => import('@components/floating-button'), { ssr: false })
 const Bs = dynamic<{ text: string; large: number }>(
+  //@ts-ignore
   () => new Promise((resolve) => setTimeout(() => resolve(import('@components/button')), 10000)),
   { ssr: false, suspense: true, loading: () => <span>is a Big Component.</span> }
 )
@@ -62,7 +63,7 @@ const Enter: NextPage = () => {
 
   useEffect(() => {
     if (tokenData?.ok) {
-      router.replace('/home')
+      router.replace('/home');
     }
   }, [tokenData, router])
 
@@ -125,9 +126,9 @@ const Enter: NextPage = () => {
               ) : null}
               {method === 'phone' ? (
                 <>
-                  <Suspense fallback={<span>loading...</span>}>
-                    <Bs text="123213" />
-                  </Suspense>
+                  {/* <Suspense fallback={<span>loading...</span>}>
+                    <Bs text="123213" large={1} />
+                  </Suspense> */}
                   <Input
                     register={register('phone')}
                     name="phone"
@@ -174,4 +175,5 @@ const Enter: NextPage = () => {
     </div>
   )
 }
+
 export default Enter
