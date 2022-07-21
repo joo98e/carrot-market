@@ -1,13 +1,15 @@
-import type { NextPage } from 'next'
+import type { NextPage, NextPageContext } from 'next'
 import Link from 'next/link'
 import Layout from '@components/layout'
 import useUser from '@libs/client/useUser'
-import useSWR from 'swr'
+import useSWR, { SWRConfig } from 'swr'
 import { Review, User } from '.prisma/client'
 import BasketIcon from '@components/icons/BasketIcon'
 import IconHeart from '@components/icons/heart'
 import ShoppingBagIcon from '@components/icons/ShoppingBagIcon'
 import { cls } from '@libs/client/utils'
+import { withSsrSession } from '@libs/server/withSession'
+import client from '@libs/server/client'
 
 interface ReviewWithUser extends Review {
   createdBy: User
@@ -26,6 +28,7 @@ const Profile: NextPage = () => {
       <div className="px-4">
         <div className="flex items-center mt-4 space-x-3">
           {user?.avatar ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               className="w-16 h-16 bg-slate-500 rounded-full"
               src={`https://imagedelivery.net/PQiTCCXQwNASghVAHpWmhQ/${user?.avatar}/resizeCover`}
@@ -36,7 +39,7 @@ const Profile: NextPage = () => {
           )}
           <div className="flex flex-col">
             <span className="font-medium text-gray-900">
-              {isLoading ? '이름이..' : user.name ?? '못찾았어 ㅠㅠ'}
+              {isLoading ? '이름이..' : user?.name ?? '못찾았어 ㅠㅠ'}
             </span>
             <Link href="/profile/edit">
               <a className="text-sm text-gray-700">Edit profile &rarr;</a>
@@ -108,4 +111,40 @@ const Profile: NextPage = () => {
   )
 }
 
-export default Profile
+const Page: NextPage<{ profile: User }> = ({ profile }) => {
+  return (
+    <SWRConfig
+      value={{
+        fallback: {
+          '/api/users/me': {
+            ok: true,
+            profile,
+          },
+        },
+      }}
+    >
+      <Profile />
+    </SWRConfig>
+  )
+}
+
+export const getServerSideProps = withSsrSession(async (ctx: NextPageContext) => {
+  /**
+   * ctx 안에는 cookie가 있고
+   * cookie를 withIronSessionSsr의 cookie-option으로 복호화하고,
+   * req.session.user?.id 를 받을 수 있게 도와준다.
+   */
+  const profile = await client.user.findUnique({
+    where: {
+      id: ctx.req?.session.user?.id,
+    },
+  })
+
+  return {
+    props: {
+      profile: JSON.parse(JSON.stringify(profile)),
+    },
+  }
+})
+
+export default Page

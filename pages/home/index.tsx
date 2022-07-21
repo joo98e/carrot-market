@@ -21,25 +21,30 @@ interface IResponseTypeOfProducts {
 
 const Home: NextPage = () => {
   const { user, isLoading } = useUser()
-  const { data, error } = useSWR<IResponseTypeOfProducts>(user ? '/api/products' : null, fetcher)
-
+  // 아래 코드는 유저 체크를 하기 때문에 캐시에서 받아오지 않는다.
+  // 만약 캐시로 받아오고 싶다면 유저 역시 캐시로 넣어주어야 한다.(useUser 훅)
+  // const { data } = useSWR<IResponseTypeOfProducts>(user ? '/api/products' : null, fetcher)
+  const { data } = useSWR<IResponseTypeOfProducts>('/api/products')
+  console.log(data, 2)
   return (
     <Layout title="홈" hasTabBar>
       <Head>
         <title>Home</title>
       </Head>
       <div className="flex flex-col space-y-5 divide-y">
-        {data?.products.map((product) => (
-          <Item
-            id={product.id}
-            key={product.id}
-            title={product.name}
-            price={product.price}
-            comments={1}
-            hearts={product._count.favs || 0}
-            image={product.image}
-          />
-        ))}
+        {data
+          ? data?.products?.map((product) => (
+              <Item
+                id={product.id}
+                key={product.id}
+                title={product.name}
+                price={product.price}
+                comments={1}
+                hearts={product._count?.favs ?? 0}
+                image={product.image}
+              />
+            ))
+          : 'loading...'}
         <FloatingButton href="/products/upload">
           <svg
             className="h-6 w-6"
@@ -66,7 +71,7 @@ const PageBySWRConfig: NextPage<{ products: ProductWithCount[] }> = ({ products 
   return (
     <SWRConfig
       value={{
-        // fallback : 대체, 이 데이터로 캐시 초기값을 설정한다.
+        // fallback : 대체, 이 데이터로 캐시 초기값을 설정한다
         fallback: {
           '/api/products': {
             ok: true,
@@ -82,7 +87,6 @@ const PageBySWRConfig: NextPage<{ products: ProductWithCount[] }> = ({ products 
 
 export async function getServerSideProps() {
   const products = await client.product.findMany({})
-
   return {
     props: {
       products: JSON.parse(JSON.stringify(products)),
