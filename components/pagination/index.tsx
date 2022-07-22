@@ -34,7 +34,7 @@ const Pagination = ({ total: value = 10, unit = 3, action }: IProps) => {
     if (total) {
       setTotal(Math.ceil(value / unit))
     }
-  }, [total, unit, value])
+  }, [unit, value])
 
   return (
     <div>
