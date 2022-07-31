@@ -135,9 +135,10 @@ const EditProfile: NextPage = () => {
         <div className="flex items-center space-x-3">
           {avatarPreview ? (
             <Image
-              className="w-14 h-14 rounded-full bg-slate-500"
+              // className="w-14 h-14 rounded-full"
               src={avatarPreview}
-              layout="fill"
+              width={56}
+              height={56}
               alt="profile"
             />
           ) : (

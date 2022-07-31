@@ -12,8 +12,22 @@
 
 html,
 body {
+  margin: 0;
 }
 
 textarea {
   resize: none;
+}
+
+.blog-post-content h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply text-orange-600;
+}
+
+.blog-post-content p {
+  @apply mb-1 text-gray-800;
 }

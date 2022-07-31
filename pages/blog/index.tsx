@@ -1,7 +1,7 @@
 import Layout from '@components/layout'
 import { readdirSync, readFileSync } from 'fs'
 import matter from 'gray-matter'
-import { NextPage } from 'next'
+import { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
 
 interface IBlogProps {
@@ -38,7 +38,7 @@ const Blog: NextPage<{ posts: IBlogProps[] }> = ({ posts }) => {
   )
 }
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
   const posts: IBlogProps[] = readdirSync('./posts').map((file) => {
     const slug = file.substring(0, file.lastIndexOf('.'))
     const { data } = matter(

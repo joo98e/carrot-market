@@ -5,12 +5,14 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { cls } from '@libs/client/utils'
+import Head from 'next/head'
 
 interface LayoutProps {
   children: React.ReactNode
   title?: string
   canGoBack?: boolean
   hasTabBar?: boolean
+  seoTitle?: string
 }
 
 interface ICanGoBack {
@@ -18,10 +20,14 @@ interface ICanGoBack {
 }
 
 const CanGoBack = ({ move }: ICanGoBack) => {
-  return <button className="relative left-4" onClick={move}>&larr;</button>
+  return (
+    <button className="relative left-4" onClick={move}>
+      &larr;
+    </button>
+  )
 }
 
-const Layout = ({ title, canGoBack, hasTabBar, children }: LayoutProps) => {
+const Layout = ({ title, canGoBack, hasTabBar, children, seoTitle }: LayoutProps) => {
   const router = useRouter()
   const prevMove = () => {
     router.back()
@@ -29,6 +35,9 @@ const Layout = ({ title, canGoBack, hasTabBar, children }: LayoutProps) => {
 
   return (
     <div className="max-w-lg pt-8 mx-auto min-h-screen">
+      <Head>
+        <title>{seoTitle ?? 'Carrot Market'}</title>
+      </Head>
       <div
         className={cls(
           !canGoBack ? 'justify-center' : '',
@@ -36,9 +45,7 @@ const Layout = ({ title, canGoBack, hasTabBar, children }: LayoutProps) => {
         )}
       >
         {canGoBack && <CanGoBack move={prevMove} />}
-        {title && (
-          <span className={cls(canGoBack ? 'mx-auto' : '', '')}>{title}</span>
-        )}
+        {title && <span className={cls(canGoBack ? 'mx-auto' : '', '')}>{title}</span>}
       </div>
       <div className={cls('pt-8', hasTabBar ? 'pb-16' : '')}>{children}</div>
       {hasTabBar && (

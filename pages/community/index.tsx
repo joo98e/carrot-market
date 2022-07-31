@@ -1,4 +1,4 @@
-import type { NextPage } from 'next'
+import type { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
 import FloatingButton from '@components/floating-button'
 import Layout from '@components/layout'
@@ -28,10 +28,11 @@ const Community: NextPage = () => {
       ? `/api/posts?latitude=${latitude}&longitude=${longitude}`
       : null
   )
+
   return (
     <Layout hasTabBar title="동네생활">
       <div className="space-y-4">
-        {data &&
+        {data ?
           data.posts.map((post: PostWithUser) => {
             return (
               <Link key={post.id} href={`/community/${post.id}`}>
@@ -60,7 +61,7 @@ const Community: NextPage = () => {
                 </a>
               </Link>
             )
-          })}
+          }) : <div>contents is not exsits.</div>}
         <FloatingButton href="/community/write">
           <WriteIcon />
         </FloatingButton>
@@ -70,3 +71,9 @@ const Community: NextPage = () => {
 }
 
 export default Community
+
+export async function getStaticProps<GetStaticProps>() {
+  return {
+    props: {},
+  }
+}

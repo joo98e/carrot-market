@@ -1,24 +1,32 @@
 import Layout from '@components/layout'
 import { readdirSync } from 'fs'
-import { NextPage } from 'next'
+import matter from 'gray-matter'
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
+import remarkHtml from 'remark-html'
+import remarkParse from 'remark-parse/lib'
+import { unified } from 'unified'
 
-interface IPostDetail {}
-
-interface ISlugQuery extends ParsedUrlQuery {
+interface IPost {
   slug: string
+  post: string
 }
 
-const PostDetail: NextPage<IPostDetail> = ({}) => {
-  const { query } = useRouter()
-
-  return <Layout title={`${query.slug}`}>1</Layout>
+const Post: NextPage<IPost> = ({ slug, post }) => {
+  return (
+    <Layout canGoBack title={`${slug}`} seoTitle={slug}>
+      <div
+        className="blog-post-content"
+        dangerouslySetInnerHTML={{ __html: post ?? '<div>content is not exsits.</div>' }}
+      />
+    </Layout>
+  )
 }
 
-export default PostDetail
+export default Post
 
-export function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = () => {
   const files = readdirSync('./posts').map((file) => {
     return {
       params: {
@@ -26,15 +34,28 @@ export function getStaticPaths() {
       },
     }
   })
-  console.log(files)
   return {
     paths: files,
     fallback: false,
   }
 }
 
-export function getStaticProps() {
+interface IMatterPost {
+  data: {
+    title?: string
+    [key: string]: any
+  }
+  content?: string
+}
+
+export const getStaticProps: GetStaticProps = async (ctx) => {
+  const { data, content }: IMatterPost = matter.read(`./posts/${ctx.params?.slug}.md`)
+  const { value } = await unified().use(remarkParse).use(remarkHtml).process(content)
+
   return {
-    props: {},
+    props: {
+      slug: data.title,
+      post: value,
+    },
   }
 }
