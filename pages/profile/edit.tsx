@@ -12,6 +12,7 @@ import { useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { ICloudFlareDCUResponse, IIpIoResponse } from 'pages/api/files'
+import Image from 'next/image'
 
 interface IEditProfileForm {
   email?: string
@@ -133,7 +134,12 @@ const EditProfile: NextPage = () => {
       <form onSubmit={handleSubmit(onValid)} className="py-10 px-4 space-y-4">
         <div className="flex items-center space-x-3">
           {avatarPreview ? (
-            <img className="w-14 h-14 rounded-full bg-slate-500" src={avatarPreview} />
+            <Image
+              className="w-14 h-14 rounded-full bg-slate-500"
+              src={avatarPreview}
+              layout="fill"
+              alt="profile"
+            />
           ) : (
             <div className="w-14 h-14 rounded-full bg-slate-500" />
           )}

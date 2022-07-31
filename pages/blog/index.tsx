@@ -2,11 +2,13 @@ import Layout from '@components/layout'
 import { readdirSync, readFileSync } from 'fs'
 import matter from 'gray-matter'
 import { NextPage } from 'next'
+import Link from 'next/link'
 
 interface IBlogProps {
   title?: string
   date?: string
   category?: string
+  slug?: string
 }
 
 interface IProps {
@@ -20,7 +22,10 @@ const Blog: NextPage<{ posts: IBlogProps[] }> = ({ posts }) => {
       <ul>
         {posts.map((post, idx) => (
           <div className="flex justify-between items-center m-2" key={idx}>
-            <span className="font-semibold text-blue-500">{post.title}</span>
+            <Link href={`/blog/${post.slug}`}>
+              <a className="font-semibold text-blue-500">{post.title}</a>
+            </Link>
+            <span className="font-semibold text-blue-500"></span>
             <div>
               <span className="text-sm">
                 {post.category} | {post.date}
@@ -35,17 +40,19 @@ const Blog: NextPage<{ posts: IBlogProps[] }> = ({ posts }) => {
 
 export async function getStaticProps() {
   const posts: IBlogProps[] = readdirSync('./posts').map((file) => {
+    const slug = file.substring(0, file.lastIndexOf('.'))
     const { data } = matter(
       readFileSync(`./posts/${file}`, {
         encoding: 'utf-8',
       })
     )
-    return data
+
+    return { ...data, slug }
   })
 
   return {
     props: {
-      posts,
+      posts: posts.reverse(),
     },
   }
 }

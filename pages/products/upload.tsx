@@ -9,6 +9,7 @@ import { Product } from '@prisma/client'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { ICloudFlareDCUResponse } from 'pages/api/files'
+import Image from 'next/image'
 
 interface IProductUploadForm {
   name: string
@@ -84,7 +85,7 @@ const Upload: NextPage = () => {
         <div>
           {photoPreview ? (
             <div className="w-full text-gray-600 flex items-center justify-center h-48">
-              <img className="h-full" src={photoPreview} alt="제품 사진" />
+              <Image className="h-full" src={photoPreview} alt="제품 사진" layout="fill" />
             </div>
           ) : (
             <label className="w-full cursor-pointer text-gray-600 hover:border-orange-500 hover:text-orange-500 flex items-center justify-center border-2 border-dashed border-gray-300 h-48 rounded-md">
