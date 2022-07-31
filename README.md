@@ -3,7 +3,7 @@
 
 ## latest viewd lectures
 ```
-15.7, 비동기 처리 공부 + *cloudflare 이용* 
+15.9
 ```
 
 ## keyword
