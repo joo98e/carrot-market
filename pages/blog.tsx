@@ -23,7 +23,7 @@ const Blog: NextPage<{ posts: IBlogProps[] }> = ({ posts }) => {
             <span className="font-semibold text-blue-500">{post.title}</span>
             <div>
               <span className="text-sm">
-                {post.category} / {post.date}
+                {post.category} | {post.date}
               </span>
             </div>
           </div>
