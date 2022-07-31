@@ -28,7 +28,7 @@ const Layout = ({ title, canGoBack, hasTabBar, children }: LayoutProps) => {
   }
 
   return (
-    <div className="max-w-lg pt-8 mx-auto">
+    <div className="max-w-lg pt-8 mx-auto min-h-screen">
       <div
         className={cls(
           !canGoBack ? 'justify-center' : '',
