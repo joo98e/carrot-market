@@ -1,4 +1,4 @@
-import type { GetStaticPaths, GetStaticProps, NextPage } from 'next'
+import type { GetStaticPaths, GetStaticProps, GetStaticPropsContext, NextPage } from 'next'
 import Layout from '@components/layout'
 import { useRouter } from 'next/router'
 import useSWR, { useSWRConfig } from 'swr'
@@ -139,7 +139,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 }
 
-export const getStaticProps: GetStaticProps = async (ctx) => {
+export const getStaticProps: GetStaticProps = async (ctx: GetStaticPropsContext) => {
   if (!ctx?.params?.id) {
     return {
       props: {},
