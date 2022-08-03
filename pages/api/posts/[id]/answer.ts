@@ -3,15 +3,22 @@ import client from '@libs/server/client'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { withApiSession } from '@libs/server/withSession'
 
-const handler = async (
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseType>
-) => {
+declare module 'next' {
+  type NextApiRequest = NextApiRequest & {
+    query: {
+      [key: string]: string | string[]
+    }
+  }
+}
+
+const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseType>) => {
   const {
     query: { id },
     body: { answer },
     session: { user },
   } = req
+
+  console.log('query', id)
 
   const post = await client.post.findUnique({
     where: {

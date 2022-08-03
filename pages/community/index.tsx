@@ -17,6 +17,7 @@ interface PostWithUser extends Post {
     wonderings: number
   }
 }
+
 interface IPostsResponse {
   ok?: boolean
   posts: PostWithUser[]
@@ -36,7 +37,7 @@ const Community: NextPage<IPostsResponse> = ({ posts }) => {
             <Link key={post.id} href={`/community/${post.id}`}>
               <a className="flex flex-col cursor-pointer items-start">
                 <span className="flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                  동네질문
+                  동네생활
                 </span>
                 <div className="mt-2 text-gray-700">
                   <span className="text-orange-500 font-medium">Q.</span>
@@ -73,12 +74,12 @@ const Community: NextPage<IPostsResponse> = ({ posts }) => {
 export default Community
 
 export async function getStaticProps<GetStaticProps>() {
+  console.log('BUILDING COMM. statically.')
   const posts = await client.post.findMany({ include: { user: true } })
-  console.log(posts)
+
   return {
     props: {
       posts: JSON.parse(JSON.stringify(posts)),
     },
-    revalidate: 20,
   }
 }

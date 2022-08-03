@@ -63,7 +63,7 @@ const Enter: NextPage = () => {
 
   useEffect(() => {
     if (tokenData?.ok) {
-      router.replace('/home');
+      router.replace('/home')
     }
   }, [tokenData, router])
 

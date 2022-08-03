@@ -26,8 +26,14 @@ const Post: NextPage<IPost> = ({ slug, post }) => {
 
 export default Post
 
+interface ISSGWithISRFiles {
+  params: {
+    slug: string
+  }
+}
+
 export const getStaticPaths: GetStaticPaths = () => {
-  const files = readdirSync('./posts').map((file) => {
+  const files: ISSGWithISRFiles[] = readdirSync('./posts').map((file) => {
     return {
       params: {
         slug: file.substring(0, file.lastIndexOf('.')),

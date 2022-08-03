@@ -25,7 +25,7 @@ const Home: NextPage = () => {
   // 만약 캐시로 받아오고 싶다면 유저 역시 캐시로 넣어주어야 한다.(useUser 훅)
   // const { data } = useSWR<IResponseTypeOfProducts>(user ? '/api/products' : null, fetcher)
   const { data } = useSWR<IResponseTypeOfProducts>('/api/products')
-  console.log(data, 2)
+  // console.log(data, 2)
   return (
     <Layout title="홈" hasTabBar>
       <Head>

@@ -3,10 +3,7 @@ import client from '@libs/server/client'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { withApiSession } from '@libs/server/withSession'
 
-const handler = async (
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseType>
-) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseType>) => {
   const {
     body: { question },
     session: { user },
@@ -16,8 +13,9 @@ const handler = async (
     const {
       query: { latitude, longitude },
     } = req
-    const parsedLatitude = parseFloat(latitude.toString())
-    const parsedLongitude = parseFloat(longitude.toString())
+    // @nextjs 12.2.0 release => legacy
+    // const parsedLatitude = parseFloat(latitude.toString())
+    // const parsedLongitude = parseFloat(longitude.toString())
     const posts = await client.post.findMany({
       take: 10,
       include: {
@@ -34,16 +32,17 @@ const handler = async (
           },
         },
       },
-      where: {
-        latitude: {
-          gte: parsedLatitude - 0.01,
-          lte: parsedLatitude + 0.01,
-        },
-        longitude: {
-          gte: parsedLongitude - 0.01,
-          lte: parsedLongitude + 0.01,
-        },
-      },
+      // @nextjs 12.2.0 release => legacy
+      // where: {
+      //   latitude: {
+      //     gte: parsedLatitude - 0.01,
+      //     lte: parsedLatitude + 0.01,
+      //   },
+      //   longitude: {
+      //     gte: parsedLongitude - 0.01,
+      //     lte: parsedLongitude + 0.01,
+      //   },
+      // },
     })
 
     res.status(200).json({
@@ -66,6 +65,9 @@ const handler = async (
         },
       },
     })
+
+    await res.revalidate('/community')
+
     res.status(200).json({
       ok: true,
       post,

@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { withApiSession } from '@libs/server/withSession'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseType>) => {
+  
   if (req.method === 'GET') {
     const profile = await client.user.findUnique({
       where: {
@@ -22,6 +23,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       session: { user },
       body: { email, phone, name, avatarId },
     } = req
+
 
     const currentUser = await client.user.findUnique({
       where: {
