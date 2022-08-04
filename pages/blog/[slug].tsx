@@ -33,16 +33,18 @@ interface ISSGWithISRFiles {
 }
 
 export const getStaticPaths: GetStaticPaths = () => {
-  const files: ISSGWithISRFiles[] = readdirSync('./posts').map((file) => {
-    return {
-      params: {
-        slug: file.substring(0, file.lastIndexOf('.')),
-      },
-    }
-  })
+
+  // const files: ISSGWithISRFiles[] = readdirSync('./posts').map((file) => {
+  //   return {
+  //     params: {
+  //       slug: file.substring(0, file.lastIndexOf('.')),
+  //     },
+  //   }
+  // })
+  
   return {
-    paths: files,
-    fallback: false,
+    paths: [],
+    fallback: 'blocking',
   }
 }
 

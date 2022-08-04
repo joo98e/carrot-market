@@ -1,3 +1,4 @@
+import FloatingButton from '@components/floating-button'
 import Layout from '@components/layout'
 import { readdirSync, readFileSync } from 'fs'
 import matter from 'gray-matter'
@@ -16,7 +17,6 @@ interface IProps {
 }
 
 const Blog: NextPage<{ posts: IBlogProps[] }> = ({ posts }) => {
-  console.log(posts)
   return (
     <Layout title="Latest Posts">
       <ul>
@@ -34,6 +34,7 @@ const Blog: NextPage<{ posts: IBlogProps[] }> = ({ posts }) => {
           </div>
         ))}
       </ul>
+      <FloatingButton children={<span>write</span>} href="/blog/create" />
     </Layout>
   )
 }
@@ -49,7 +50,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
     return { ...data, slug }
   })
-
+  
   return {
     props: {
       posts: posts.reverse(),

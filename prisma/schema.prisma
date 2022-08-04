@@ -33,6 +33,7 @@ model User {
   records        Record[]
   streams        Stream[]
   messages       Message[]
+  Blog           Blog[]
 }
 
 model Token {
@@ -173,6 +174,16 @@ model Message {
   message   String   @db.MediumText
   stream    Stream   @relation(fields: [streamId], references: [id], onDelete: Cascade)
   streamId  Int
+}
+
+model Blog {
+  id       Int      @id @default(autoincrement())
+  subject  String
+  content  String   @db.LongText
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   Int
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
 }
 
 enum Kind {

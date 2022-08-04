@@ -32,7 +32,7 @@ interface MutationResult {
 }
 
 const Enter: NextPage = () => {
-  const {} = useUser()
+  const { user } = useUser()
   const [enter, { loading, data, error }] = useMutation<MutationResult>('/api/users/enter')
   const [confirmToken, { loading: tokenLoading, data: tokenData }] =
     useMutation<MutationResult>('/api/users/confirm')
@@ -65,7 +65,11 @@ const Enter: NextPage = () => {
     if (tokenData?.ok) {
       router.replace('/home')
     }
-  }, [tokenData, router])
+
+    if (user?.id) {
+      router.replace('/home')
+    }
+  }, [tokenData, router, user])
 
   return (
     <div className="mt-16 px-4">
