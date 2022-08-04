@@ -41,9 +41,9 @@ const BlogCreate = () => {
       reset()
       router.replace('/blog')
     }
-  }, [loading])
-  
-  console.log(moment(new Date).format("yyyy-MM-DD"))
+  }, [data, data?.ok, loading, reset, router])
+
+  console.log(moment(new Date()).format('yyyy-MM-DD'))
 
   return (
     <Layout canGoBack title="Blog Write">

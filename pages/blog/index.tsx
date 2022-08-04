@@ -12,10 +12,6 @@ interface IBlogProps {
   slug?: string
 }
 
-interface IProps {
-  posts: IBlogProps[]
-}
-
 const Blog: NextPage<{ posts: IBlogProps[] }> = ({ posts }) => {
   return (
     <Layout title="Latest Posts">
@@ -34,7 +30,7 @@ const Blog: NextPage<{ posts: IBlogProps[] }> = ({ posts }) => {
           </div>
         ))}
       </ul>
-      <FloatingButton children={<span>write</span>} href="/blog/create" />
+      <FloatingButton href="/blog/create"><span>write</span></FloatingButton>
     </Layout>
   )
 }
