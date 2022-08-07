@@ -41,84 +41,94 @@ const ItemDetail: NextPage<IItemDetailResponse> = ({ product, relatedProducts, i
     toggleFav({})
   }
 
-  return (
-    <Layout title="아이템 상세" canGoBack>
-      <div className="px-4 py-10">
-        <div>
-          {product.image ? (
-            <div className="relative h-48">
-              <Image
-                className="object-contain"
-                src={`https://imagedelivery.net/PQiTCCXQwNASghVAHpWmhQ/${product.image}/public`}
-                alt="제품 사진"
-                layout="fill"
-              />
-            </div>
-          ) : (
-            <div className="h-96 bg-slate-200" />
-          )}
-          <div className="flex border-b mt-1 py-3 items-center space-x-3 cursor-pointer">
-            {product.user.avatar ? (
-              <Image
-                src={`https://imagedelivery.net/PQiTCCXQwNASghVAHpWmhQ/${product.user.avatar}/resizeCover`}
-                alt="판매자"
-                width={48}
-                height={48}
-              />
+  if (router.isFallback) {
+    return (
+      <Layout>
+        <div>처음 접속하셨군요?</div>
+        <p>데이터를 받아와 페이지를 생성중입니다. 잠시만 기다려주세요.</p>
+      </Layout>
+    )
+  } else {
+    return (
+      <Layout title="아이템 상세" canGoBack>
+        <div className="px-4 py-10">
+          <div>
+            {product.image ? (
+              <div className="relative h-48">
+                <Image
+                  className="object-contain"
+                  src={`https://imagedelivery.net/PQiTCCXQwNASghVAHpWmhQ/${product.image}/public`}
+                  alt="제품 사진"
+                  layout="fill"
+                />
+              </div>
             ) : (
-              <div className="w-12 h-12 rounded-full bg-slate-300" />
+              <div className="h-96 bg-slate-200" />
             )}
-            <div>
-              <p className="text-sm font-medium text-gray-500">
-                {product.user?.name ?? '이름이..'}
-              </p>
-              <Link href={`/profiles/${product.user?.id}`}>
-                <a className="text-sm font-medium text-gray-700">View profile &rarr;</a>
-              </Link>
+            <div className="flex border-b mt-1 py-3 items-center space-x-3 cursor-pointer">
+              {product.user.avatar ? (
+                <Image
+                  src={`https://imagedelivery.net/PQiTCCXQwNASghVAHpWmhQ/${product.user.avatar}/resizeCover`}
+                  alt="판매자"
+                  width={48}
+                  height={48}
+                />
+              ) : (
+                <div className="w-12 h-12 rounded-full bg-slate-300" />
+              )}
+              <div>
+                <p className="text-sm font-medium text-gray-500">
+                  {product.user?.name ?? '이름이..'}
+                </p>
+                <Link href={`/profiles/${product.user?.id}`}>
+                  <a className="text-sm font-medium text-gray-700">View profile &rarr;</a>
+                </Link>
+              </div>
+            </div>
+            <div className="mt-5">
+              <h1 className="text-3xl font-extrabold text-gray-900">
+                {product.name ?? '이 물건은..'}
+              </h1>
+              <span className="text-3xl mt-3 text-gray-900">₩{product.price ?? '가격이..'}</span>
+              <p className="text-base my-6 text-gray-700">{product.desc ?? '그리고 설명이..'}</p>
+              <div className="flex items-center justify-between space-x-2">
+                {/* 버튼 컴포넌트를 만드는 것이 좋음 */}
+                <button className="flex-1 bg-orange-500 text-white py-3 rounded-md shadow-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 font-medium hover:bg-orange-600 transition-colors">
+                  Talk to seller
+                </button>
+                <button
+                  onClick={onFavClick}
+                  className={cls(
+                    'p-3 flex items-center justify-center rounded-full hover:bg-gray-100',
+                    isLiked
+                      ? 'text-orange-500 hover:text-orange-600 fill-orange-500'
+                      : 'text-gray-400 hover:text-gray-500'
+                  )}
+                >
+                  {isLiked ? <IconHeartSolid /> : <IconHeart />}
+                </button>
+              </div>
             </div>
           </div>
-          <div className="mt-5">
-            <h1 className="text-3xl font-extrabold text-gray-900">
-              {product.name ?? '이 물건은..'}
-            </h1>
-            <span className="text-3xl mt-3 text-gray-900">₩{product.price ?? '가격이..'}</span>
-            <p className="text-base my-6 text-gray-700">{product.desc ?? '그리고 설명이..'}</p>
-            <div className="flex items-center justify-between space-x-2">
-              {/* 버튼 컴포넌트를 만드는 것이 좋음 */}
-              <button className="flex-1 bg-orange-500 text-white py-3 rounded-md shadow-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 font-medium hover:bg-orange-600 transition-colors">
-                Talk to seller
-              </button>
-              <button
-                onClick={onFavClick}
-                className={cls(
-                  'p-3 flex items-center justify-center rounded-full hover:bg-gray-100',
-                  isLiked
-                    ? 'text-orange-500 hover:text-orange-600 fill-orange-500'
-                    : 'text-gray-400 hover:text-gray-500'
-                )}
-              >
-                {isLiked ? <IconHeartSolid /> : <IconHeart />}
-              </button>
+          <div className="border-t py-6 mt-8">
+            <h2 className="text-2xl font-bold text-gray-900">Similar items</h2>
+            <div className="grid grid-cols-2 gap-4 mt-6">
+              {relatedProducts.map((product) => (
+                <Link href={`/products/${product.id}`} key={product.id}>
+                  <a>
+                    <div className="h-56 w-full bg-slate-300" />
+                    <h3 className="text-sm text-gray-700 -mb-1">{product.name}</h3>
+                    <span className="text-xs font-medium text-gray-700">₩{product.price}</span>
+                  </a>
+                </Link>
+              ))}
             </div>
           </div>
         </div>
-        <div className="border-t py-6 mt-8">
-          <h2 className="text-2xl font-bold text-gray-900">Similar items</h2>
-          <div className="grid grid-cols-2 gap-4 mt-6">
-            {relatedProducts.map((product) => (
-              <Link href={`/products/${product.id}`} key={product.id}>
-                <a>
-                  <div className="h-56 w-full bg-slate-300" />
-                  <h3 className="text-sm text-gray-700 -mb-1">{product.name}</h3>
-                  <span className="text-xs font-medium text-gray-700">₩{product.price}</span>
-                </a>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-    </Layout>
-  )
+      </Layout>
+    )
+  }
+  
 }
 
 export default ItemDetail
@@ -131,11 +141,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
      * 몇 개의 페이지인지는 가늠할 수 없다. 따라서, paths에 빈 배열을 리턴한다.
      *  특정 개수를 파악할 수 있는 ISR이라면 [slug].tsx를 참고하면 될 것 같다.
      *
-     *  prisma client로부터 제품 데이터를 모~두 받아와 미리 만들 수는 있으나, DB가 죽거나 빌드가 터질 것이다.
+     *  prisma client로부터 제품 데이터를 모~두 받아와 미리 만들 수는 있으나, DB가 죽거나 빌드가 터진다.
      * prisma Client를 이용하는 것은 좋은 생각이 아니다.
      */
     paths: [],
-    fallback: 'blocking',
+    fallback: true,
   }
 }
 
