@@ -3,7 +3,7 @@ import { PrismaClient } from '.prisma/client'
 const client = new PrismaClient()
 
 async function main() {
-  [...Array.from(Array(500).keys())].forEach(async (item, idx) => {
+  for (const item of [...Array.from(Array(500).keys())]) {
     await client.stream.create({
       data: {
         name: String(item),
@@ -14,12 +14,12 @@ async function main() {
         cloudflareKey: '',
         user: {
           connect: {
-            id: 27,
+            id: 1,
           },
         },
       },
     })
-  })
+  }
 }
 
 main()

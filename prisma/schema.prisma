@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
 }
 
 datasource db {
@@ -28,7 +28,7 @@ model User {
   receivedReview Review[]    @relation(name: "receivedReviews")
   favs           Fav[]
   sales          Sales[]
-  purchases      Purchases[]
+  purchases      Purchase[]
   records        Record[]
   streams        Stream[]
   messages       Message[]
@@ -59,7 +59,7 @@ model Product {
   desc      String      @db.MediumText
   favs      Fav[]
   Sales     Sales[]
-  purchases Purchases[]
+  purchases Purchase[]
   // records로 바꿔야 함.
   record    Record[]
 
@@ -149,7 +149,7 @@ model Sales {
   @@index([productId])
 }
 
-model Purchases {
+model Purchase {
   id        Int      @id @default(autoincrement())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
